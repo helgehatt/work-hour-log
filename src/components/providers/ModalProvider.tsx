@@ -7,7 +7,7 @@ const ModalContext = React.createContext({
   hideModal: (): void => { throw new Error("Invalid context"); }
 });
 
-export const ModalProvider: React.FC = ({ children }) => {
+const ModalProvider: React.FC = ({ children }) => {
   
   const [component, setComponent] = React.useState<Component>(null);
 
@@ -23,3 +23,5 @@ export const ModalProvider: React.FC = ({ children }) => {
 };
 
 export const useModal = () => React.useContext(ModalContext);
+
+export default ModalProvider;

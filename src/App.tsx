@@ -1,12 +1,15 @@
 import React from 'react';
-import Calender from './components/Calender';
-import { ModalProvider } from './components/ModalProvider';
+import CalenderProvider from 'src/components/providers/CalenderProvider';
+import ModalProvider from 'src/components/providers/ModalProvider';
+import CalenderView from 'src/components/CalenderView';
 
 const App: React.FC = () => {
   return (
-    <ModalProvider>
-      <Calender />
-    </ModalProvider>
+    <CalenderProvider>
+      <ModalProvider>
+        <CalenderView />
+      </ModalProvider>
+    </CalenderProvider>
   );
 }
 

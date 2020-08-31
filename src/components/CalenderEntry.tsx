@@ -1,11 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
-import { useModal } from './ModalProvider';
-import CalenderModal from './CalenderModal';
-
-interface IProps {
-  entry: WorkHourEntry
-}
+import { useModal } from 'src/components/providers/ModalProvider';
+import Modal from 'src/components/Modal';
+import EditEntry from 'src/components/EditEntry';
+import moment from 'moment';
 
 const Root = styled.div`
   /* margin: 0.25rem; */
@@ -13,14 +11,30 @@ const Root = styled.div`
   color: white;
   background-color: blue;
   border-radius: 0.25rem;
+
+  &:hover {
+    cursor: pointer;
+  }
 `;
 
-const CalenderEntry: React.FC<IProps> = ({ entry }) => {
+const CalenderEntry: React.FC<WorkHourEntry> = (entry) => {
   const { showModal } = useModal();
-  const start = entry.start.substr(11, 5);
-  const stop = entry.stop.substr(11, 5);
+
+  const start = moment.utc(entry.start).format(moment.HTML5_FMT.TIME);
+  const stop = moment.utc(entry.stop).format(moment.HTML5_FMT.TIME);
+
+  const handleClick = (event: React.SyntheticEvent) => {
+    // Avoid propagation to CalenderCell
+    event.stopPropagation();
+    showModal(
+      <Modal>
+        <EditEntry entry={entry} />
+      </Modal>
+    );
+  };
+
   return (
-    <Root onClick={() => showModal(<CalenderModal />)}>
+    <Root onClick={handleClick}>
       {start} - {stop}
     </Root>
   );

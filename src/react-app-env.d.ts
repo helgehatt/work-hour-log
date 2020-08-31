@@ -1,9 +1,9 @@
 /// <reference types="react-scripts" />
 
 interface WorkHourEntry {
-  _id: string
+  id: string
   start: string
   stop: string
 }
 
-interface WorkHourLog extends Record<string, Array<WorkHourEntry>> {}
+interface WorkHourLog extends Record<string, Record<string, WorkHourEntry>> {}

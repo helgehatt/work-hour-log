@@ -1,25 +1,29 @@
 
-const baseURL = 'http://localhost:34761';
-const baseOptions: RequestInit = {
-  // mode: 'cors',
-};
+const baseURL = 'http://localhost:35195';
 
-const read = () => fetch(`${baseURL}/read`, baseOptions)
-  .then(response => response.json());
+const read = () => fetch(`${baseURL}/read`, {
+  method: 'GET',
+}).then(response => response.json() as Promise<WorkHourLog>);
 
-// export default {
-//   read,
-// } as const;
+const create = (entry: Omit<WorkHourEntry, 'id'>) => fetch(`${baseURL}/create`, { 
+  method: 'POST',
+  body: JSON.stringify(entry),
+}).then(response => {});
 
-// Mock
-export default {
-  read: (): Promise<WorkHourLog> => Promise.resolve({
-    '2020-08-01': [
-      {
-        _id: "asdf",
-        start: "2020-08-01T13:00:00.000Z",
-        stop: "2020-08-01T16:00:00.000Z",
-      }
-    ]
-  })
-}
+const _delete = (id: string) => fetch(`${baseURL}/delete?id=${id}`, {
+  method: 'POST',
+}).then(response => {});
+
+const update = (entry: WorkHourEntry) => fetch(`${baseURL}/update`, { 
+  method: 'POST',
+  body: JSON.stringify(entry),
+}).then(response => {});
+
+const API = {
+  create,
+  delete: _delete,
+  read,
+  update,
+} as const;
+
+export default API;
