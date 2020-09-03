@@ -1,13 +1,22 @@
 const faunadb = require('faunadb'), q = faunadb.query;
-const { client, success, failure, unpack } = require('./common');
+const { client, verify, success, failure, unpack } = require('./common');
 
 exports.handler = (event, context) => {
+  if (event.httpMethod === 'OPTIONS') {
+    return success();
+  }
+
+  try {
+    const payload = verify(event.headers);
+  } catch (error) {
+    return failure(error, 401);
+  }
+
   return client.query(q.Map(
     q.Paginate(q.Documents(q.Collection('work-hour-log'))), 
     q.Lambda('i', q.Get(q.Var('i')))
   ))
   .then(transform)
-  .then(JSON.stringify)
   .then(success)
   .catch(failure);
 };

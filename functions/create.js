@@ -1,8 +1,18 @@
 const faunadb = require('faunadb'), q = faunadb.query;
-const { client, success, failure, unpack } = require('./common');
+const { client, verify, success, failure, unpack } = require('./common');
 
 exports.handler = (event, context) => {
+  if (event.httpMethod === 'OPTIONS') {
+    return success();
+  }
+  
   const { start, stop } = JSON.parse(event.body || '{}');
+
+  try {
+    const payload = verify(event.headers);
+  } catch (error) {
+    return failure(error, 401);
+  }
 
   if (!start || !stop) {
     return failure('Missing parameters');
