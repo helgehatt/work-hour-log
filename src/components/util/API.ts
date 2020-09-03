@@ -6,7 +6,9 @@ const isAuthenticated = () => {
   return typeof payload === 'object' && payload?.exp > (Date.now() / 1000);
 };
 
-const baseURL = 'http://localhost:37411';
+const baseURL = process.env.NODE_ENV === 'development'
+  ? 'http://localhost:37411'
+  : 'https://work-hour-log.netlify.app/.netlify/functions';
 
 const handleRequest = ({ headers, ...options }: RequestInit): RequestInit => ({
   headers: {
