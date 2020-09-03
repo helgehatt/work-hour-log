@@ -1,9 +1,9 @@
 const faunadb = require('faunadb'), q = faunadb.query;
 const { client, verify, success, failure, unpack } = require('./common');
 
-exports.handler = (event, context) => {
+exports.handler = async (event, context, callback) => {
   if (event.httpMethod === 'OPTIONS') {
-    return success();
+    return callback(null, success());
   }
   
   const { id, start, stop } = JSON.parse(event.body || '{}');
@@ -11,22 +11,24 @@ exports.handler = (event, context) => {
   try {
     const payload = verify(event.headers);
   } catch (error) {
-    return failure(error, 401);
+    return callback(null, failure(error, 401));
   }
 
   if (!id || !start || !stop) {
-    return failure('Missing parameters');
+    return callback(null, failure('Missing parameters'));
   }
   
   if (!Date.parse(start) || !Date.parse(stop)) {
-    return failure('Invalid parameters');
+    return callback(null, failure('Invalid parameters'));
   }
-  
-  return client.query(q.Update(
-    q.Ref(q.Collection('work-hour-log'), id), 
-    { data: { start, stop } }
-  ))
-  .then(unpack)
-  .then(success)
-  .catch(failure);
-}
+
+  try {
+    const response = await client.query(q.Update(
+      q.Ref(q.Collection('work-hour-log'), id), 
+      { data: { start, stop } },
+    ));    
+    return callback(null, success(unpack(response)));
+  } catch (error) {
+    return callback(null, failure(error));
+  }
+};

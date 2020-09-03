@@ -7,8 +7,8 @@ const isAuthenticated = () => {
 };
 
 const baseURL = process.env.NODE_ENV === 'development'
-  ? 'http://localhost:37411'
-  : 'https://work-hour-log.netlify.app/.netlify/functions';
+  ? 'http://localhost:37699/'
+  : 'https://work-hour-log.netlify.app/.netlify/functions/';
 
 const handleRequest = ({ headers, ...options }: RequestInit): RequestInit => ({
   headers: {
@@ -26,11 +26,11 @@ const handleResponse = async (response: Response) => {
 };
 
 const _fetch = (url: string, options: RequestInit) => fetch(
-  `${baseURL}/${url}`, 
+  baseURL + url,
   handleRequest(options),
 ).then(handleResponse);
 
-const login = (password: string) => _fetch(`login`, {
+const login = (password: string) => _fetch('login', {
   method: 'POST',
   body: JSON.stringify({ password }),
 }).then(response => {
@@ -38,20 +38,21 @@ const login = (password: string) => _fetch(`login`, {
   return response;
 });
 
-const read = (): Promise<WorkHourLog> => _fetch(`read`, {
+const read = (): Promise<WorkHourLog> => _fetch('read', {
   method: 'GET',
 });
 
-const create = (entry: Omit<WorkHourEntry, 'id'>) => _fetch(`create`, {
+const create = (entry: Omit<WorkHourEntry, 'id'>) => _fetch('create', {
   method: 'POST',
   body: JSON.stringify(entry),
 });
 
-const _delete = (id: string) => _fetch(`delete?id=${id}`, {
+const _delete = (id: string) => _fetch('delete', {
   method: 'POST',
+  body: JSON.stringify({ id }),
 });
 
-const update = (entry: WorkHourEntry) => _fetch(`update`, {
+const update = (entry: WorkHourEntry) => _fetch('update', {
   method: 'POST',
   body: JSON.stringify(entry),
 });

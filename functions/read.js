@@ -1,24 +1,26 @@
 const faunadb = require('faunadb'), q = faunadb.query;
 const { client, verify, success, failure, unpack } = require('./common');
 
-exports.handler = (event, context) => {
+exports.handler = async (event, context, callback) => {
   if (event.httpMethod === 'OPTIONS') {
-    return success();
+    return callback(null, success());
   }
 
   try {
     const payload = verify(event.headers);
   } catch (error) {
-    return failure(error, 401);
+    return callback(null, failure(error, 401));
   }
 
-  return client.query(q.Map(
-    q.Paginate(q.Documents(q.Collection('work-hour-log'))), 
-    q.Lambda('i', q.Get(q.Var('i')))
-  ))
-  .then(transform)
-  .then(success)
-  .catch(failure);
+  try {
+    const response = await client.query(q.Map(
+      q.Paginate(q.Documents(q.Collection('work-hour-log'))),
+      q.Lambda('i', q.Get(q.Var('i'))),
+    ));    
+    return callback(null, success(transform(response)));
+  } catch (error) {
+    return callback(null, failure(error));
+  }
 };
 
 const transform = (response) => response.data

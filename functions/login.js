@@ -1,22 +1,23 @@
 const { success, failure, sign } = require('./common');
 const crypto = require('crypto');
 
-exports.handler = (event, context) => {
+exports.handler = async (event, context, callback) => {
   if (event.httpMethod === 'OPTIONS') {
-    return success();
+    return callback(null, success());
   }
 
   const { password } = JSON.parse(event.body || '{}');
 
   if (!password) {
-    return failure('Missing parameters');
+    return callback(null, failure('Missing parameters'));
   }
 
-  const hash = crypto.pbkdf2Sync(password, process.env.CRYPTO_PASSWORD_SALT, 10000, 64, 'sha512').toString('base64');
+  const salt = process.env.CRYPTO_PASSWORD_SALT;
+  const hash = crypto.pbkdf2Sync(password, salt, 10000, 64, 'sha512');
 
-  if (process.env.CRYPTO_PASSWORD_HASH !== hash) {
-    return failure('Invalid parameters');
+  if (process.env.CRYPTO_PASSWORD_HASH !== hash.toString('base64')) {
+    return callback(null, failure('Invalid parameters'));
   }
 
-  return success({ token: sign() });
+  return callback(null, success({ token: sign() }));
 };
