@@ -12,16 +12,17 @@ const Root = styled.div`
   background-color: white;
   margin: auto;
   margin-top: 2rem;
-  width: 450px;
-  height: 600px;
+  width: max-content;
+  max-width: 100%;
   border-radius: 0.25rem;
+  padding: 1rem;
 `;
 
-const Modal: React.FC = ({ children }) => {
+const Modal: React.FC = ({ children, ...props }) => {
   const { hideModal } = useModal();
   return (
     <Overlay onClick={hideModal}>
-      <Root onClick={event => event.stopPropagation()}>
+      <Root onClick={event => event.stopPropagation()} {...props}>
         {children}
       </Root>
     </Overlay>

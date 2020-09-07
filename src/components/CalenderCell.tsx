@@ -4,30 +4,26 @@ import constants from 'src/components/util/constants';
 import { useCalenderDate } from 'src/components/providers/CalenderProvider';
 import CalenderEntry from 'src/components/CalenderEntry';
 import { useModal } from 'src/components/providers/ModalProvider';
-import Modal from 'src/components/Modal';
-import AddEntry from 'src/components/AddEntry';
+import AddEntryModal from 'src/components/AddEntryModal';
 
 interface IProps {
   date: string;
 }
 
-const Root = styled.div<{ isActive: boolean }>`
-  padding: 0.25rem;
+const Root = styled.div<{ isToday: boolean }>`
   min-height: 5rem;
   border-right: ${constants.BORDER};
   border-bottom: ${constants.BORDER};
-  ${({ isActive }) => !isActive ? css`
-    color: ${constants.BORDER_COLOR};
+  ${({ isToday }) => isToday ? css`
+    background-color: ${constants.BORDER_COLOR};
   ` : ''}
 `;
 
-const CellLabel = styled.span<{ isToday: boolean }>`
+const CellLabel = styled.span<{ isActive: boolean }>`
   font-size: 0.9rem;
   padding: 0.25rem;
-  ${({ isToday }) => isToday ? css`
-    color: white;
-    background-color: red;
-    border-radius: 50%;
+  ${({ isActive }) => !isActive ? css`
+    color: ${constants.BORDER_COLOR};
   ` : ''}
 `;
 
@@ -36,19 +32,15 @@ const CalenderCell: React.FC<IProps> = ({ date }) => {
   const { isToday, isActive, hours } = useCalenderDate(date);
 
   const handleClick = () => {
-    showModal(
-      <Modal>
-        <AddEntry date={date} />
-      </Modal>
-    );
+    showModal(<AddEntryModal date={date} />);
   };
 
   return (
-    <Root isActive={isActive} onClick={handleClick}>
-      <CellLabel isToday={isToday}>
+    <Root isToday={isToday} onClick={handleClick}>
+      <CellLabel isActive={isActive}>
         {Number(date.substr(8))}
       </CellLabel>
-      {hours?.map(entry => (
+      {isActive && hours?.map(entry => (
         <React.Fragment key={entry.id}>
           <CalenderEntry {...entry} />
         </React.Fragment>

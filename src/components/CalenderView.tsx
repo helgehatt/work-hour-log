@@ -1,10 +1,11 @@
 import React from 'react';
 import styled from 'styled-components';
-import { useCalenderNav, useCalenderSum } from 'src/components/providers/CalenderProvider';
+import { useCalenderNav } from 'src/components/providers/CalenderProvider';
 import CalenderGrid from 'src/components/CalenderGrid';
 import constants from 'src/components/util/constants';
 import { useModal } from 'src/components/providers/ModalProvider';
 import LoginModal from 'src/components/LoginModal';
+import CalenderStatsModal from 'src/components/CalenderStatsModal';
 
 const Root = styled.div`
 `;
@@ -24,17 +25,15 @@ const Button = styled.button`
 
 const CalenderView: React.FC = () => {
   const { showModal } = useModal();
-  const { hours, breaks } = useCalenderSum();
   const { activeMonth, currentMonth, prevMonth, nextMonth } = useCalenderNav();
   return (
     <Root>
+      <CalenderGrid month={activeMonth} />
       <Button onClick={currentMonth}>Today</Button>
       <Button onClick={prevMonth}>Prev</Button>
       <Button onClick={nextMonth}>Next</Button>
+      <Button onClick={() => showModal(<CalenderStatsModal />)}>Stats</Button>
       <Button onClick={() => showModal(<LoginModal />)}>Login</Button>
-      <CalenderGrid month={activeMonth} />
-      <div>Hours: {hours}</div>
-      <div>Hours w/o breaks: {hours - breaks * 0.5}</div>
     </Root>
   );
 };

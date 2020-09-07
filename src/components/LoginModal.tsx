@@ -6,7 +6,10 @@ import Modal from 'src/components/Modal';
 import API from 'src/components/util/API';
 
 const Root = styled(Modal)`
-
+  form > div {
+    display: flex;
+    justify-content: space-between;
+  }
 `;
 
 const scheme = createFormData({
@@ -30,17 +33,26 @@ const LoginModal: React.FC = withFormData(scheme)(({ data }) => {
     <Root>
       Login
       <form onSubmit={handleSubmit}>
-        <input 
-          type='text' 
-          value={data.username.value} 
-          onChange={data.username.onChange}
-        />
-        <input 
-          type='password' 
-          value={data.password.value} 
-          onChange={data.password.onChange}
-        />
-        <button type='submit'>Submit</button>
+        <div>
+          Username:&nbsp;
+          <input 
+            type='text' 
+            value={data.username.value} 
+            onChange={data.username.onChange}
+          />
+        </div>
+        <div>
+          Password:&nbsp;
+          <input 
+            type='password' 
+            value={data.password.value} 
+            onChange={data.password.onChange}
+          />
+        </div>
+        <div>
+          <span/>
+          <button type='submit'>Submit</button>
+        </div>
       </form>
       {error}
     </Root>

@@ -4,27 +4,33 @@ import TimeSelect from 'src/components/TimeSelect';
 import moment from 'moment';
 import { useModal } from 'src/components/providers/ModalProvider';
 import { useCalenderAPI } from 'src/components/providers/CalenderProvider';
+import Modal from 'src/components/Modal';
 
 interface IProps {
-  date: string
+  entry: WorkHourEntry
 }
 
-const Root = styled.div`
+const Root = styled(Modal)`
 
 `;
 
-const AddEntry: React.FC<IProps> = ({ date }) => {
-  const [start] = React.useState(moment.utc(date).hour(9).startOf('hour'));
-  const [stop] = React.useState(moment.utc(date).hour(16).startOf('hour'));
+const EditEntryModal: React.FC<IProps> = ({ entry }) => {
+  const [start] = React.useState(moment.utc(entry.start));
+  const [stop] = React.useState(moment.utc(entry.stop));
 
   const API = useCalenderAPI();
   const { hideModal } = useModal();
-  
-  const handleAdd = () => {
-    API.create({
+
+  const handleUpdate = () => {
+    API.update({
+      id: entry.id,
       start: start.toISOString(),
       stop: stop.toISOString(),
     }).then(hideModal);
+  };
+
+  const handleDelete = () => {
+    API.delete(entry.id).then(hideModal);
   };
 
   return (
@@ -32,10 +38,11 @@ const AddEntry: React.FC<IProps> = ({ date }) => {
       <div>Start: <TimeSelect timestamp={start} /></div>
       <div>Stop: <TimeSelect timestamp={stop} /></div>
       <div>
-        <button onClick={handleAdd}>Add</button>
+        <button onClick={handleUpdate}>Update</button>
+        <button onClick={handleDelete}>Delete</button>
       </div>
     </Root>
   );
 };
 
-export default AddEntry;
+export default EditEntryModal;

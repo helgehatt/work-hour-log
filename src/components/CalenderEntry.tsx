@@ -1,16 +1,13 @@
 import React from 'react';
 import styled from 'styled-components';
 import { useModal } from 'src/components/providers/ModalProvider';
-import Modal from 'src/components/Modal';
-import EditEntry from 'src/components/EditEntry';
+import EditEntryModal from 'src/components/EditEntryModal';
 import moment from 'moment';
 
 const Root = styled.div`
-  /* margin: 0.25rem; */
   padding: 0rem 0.25rem 0.1rem 0.25rem;
   color: white;
-  background-color: blue;
-  border-radius: 0.25rem;
+  background-color: #899cd9;
 
   &:hover {
     cursor: pointer;
@@ -26,16 +23,12 @@ const CalenderEntry: React.FC<WorkHourEntry> = (entry) => {
   const handleClick = (event: React.SyntheticEvent) => {
     // Avoid propagation to CalenderCell
     event.stopPropagation();
-    showModal(
-      <Modal>
-        <EditEntry entry={entry} />
-      </Modal>
-    );
+    showModal(<EditEntryModal entry={entry} />);
   };
 
   return (
     <Root onClick={handleClick}>
-      {start} - {stop}
+      {start} {stop}
     </Root>
   );
 };
