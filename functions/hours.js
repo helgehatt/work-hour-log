@@ -1,5 +1,10 @@
 const { success, failure, verify } = require('./common');
-const API = require('./hours/index')
+const API = {
+  PUT: require('./hours/update').main,
+  POST: require('./hours/create').main,
+  GET: require('./hours/read').main,
+  DELETE: require('./hours/delete').main,
+};
 
 exports.handler = async (event, context, callback) => {
   if (event.httpMethod === 'OPTIONS') {
