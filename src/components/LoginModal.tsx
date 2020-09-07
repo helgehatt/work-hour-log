@@ -10,10 +10,9 @@ const Root = styled(Modal)`
 `;
 
 const scheme = createFormData({
-  'password': {
-    value: '',
-  }
-})
+  'username': { value: '' },
+  'password': { value: '' },
+});
 
 const LoginModal: React.FC = withFormData(scheme)(({ data }) => {
   const { hideModal } = useModal();
@@ -22,7 +21,7 @@ const LoginModal: React.FC = withFormData(scheme)(({ data }) => {
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
-    API.login(data.password.value)
+    API.login(data.username.value, data.password.value)
       .then(hideModal)
       .catch(() => setError('Invalid password'))
   };
@@ -31,6 +30,11 @@ const LoginModal: React.FC = withFormData(scheme)(({ data }) => {
     <Root>
       Login
       <form onSubmit={handleSubmit}>
+        <input 
+          type='text' 
+          value={data.username.value} 
+          onChange={data.username.onChange}
+        />
         <input 
           type='password' 
           value={data.password.value} 

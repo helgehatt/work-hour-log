@@ -24,7 +24,7 @@ const CalenderProvider: React.FC = ({ children }) => {
   const loadHours = () => API.read().then(setHours);
 
   React.useEffect(() => {
-    loadHours();
+    if (API.isAuthenticated()) loadHours();
   }, []);
 
   return (

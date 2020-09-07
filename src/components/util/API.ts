@@ -1,13 +1,20 @@
-import jwt from 'jsonwebtoken';
+
+const base64Decode = (input: string): Record<string, any> => {
+  return JSON.parse(Buffer.from(input, 'base64').toString('ascii'));
+};
+
+const decodePayload = (token?: string | null) => {
+  if (token == null) return {};
+  return base64Decode(token.split('.')[1]);
+}
 
 const isAuthenticated = () => {
   const token = window.localStorage.getItem('token');
-  const payload = token && jwt.decode(token);
-  return typeof payload === 'object' && payload?.exp > (Date.now() / 1000);
+  return decodePayload(token).exp > (Date.now() / 1000);
 };
 
 const baseURL = process.env.NODE_ENV === 'development'
-  ? 'http://localhost:37699/'
+  ? 'http://localhost:8888/.netlify/functions/'
   : 'https://work-hour-log.netlify.app/.netlify/functions/';
 
 const handleRequest = ({ headers, ...options }: RequestInit): RequestInit => ({
@@ -30,30 +37,29 @@ const _fetch = (url: string, options: RequestInit) => fetch(
   handleRequest(options),
 ).then(handleResponse);
 
-const login = (password: string) => _fetch('login', {
+const login = (username: string, password: string) => _fetch('login', {
   method: 'POST',
-  body: JSON.stringify({ password }),
+  body: JSON.stringify({ username, password }),
 }).then(response => {
   window.localStorage.setItem('token', response.token);
   return response;
 });
 
-const read = (): Promise<WorkHourLog> => _fetch('read', {
+const read = (): Promise<WorkHourLog> => _fetch('hours', {
   method: 'GET',
 });
 
-const create = (entry: Omit<WorkHourEntry, 'id'>) => _fetch('create', {
+const create = (entry: Omit<WorkHourEntry, 'id'>) => _fetch('hours', {
   method: 'POST',
   body: JSON.stringify(entry),
 });
 
-const _delete = (id: string) => _fetch('delete', {
-  method: 'POST',
-  body: JSON.stringify({ id }),
+const _delete = (id: string) => _fetch('hours?id=' + id, {
+  method: 'DELETE',
 });
 
-const update = (entry: WorkHourEntry) => _fetch('update', {
-  method: 'POST',
+const update = (entry: WorkHourEntry) => _fetch('hours', {
+  method: 'PUT',
   body: JSON.stringify(entry),
 });
 
