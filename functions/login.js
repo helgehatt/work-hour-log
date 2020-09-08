@@ -12,9 +12,11 @@ exports.handler = async (event, context, callback) => {
     return callback(null, failure('Missing parameters'));
   }
 
-  if (!await pw.verify({ username, password })) {
+  const user = await pw.verify({ username, password });
+
+  if (!user) {
     return callback(null, failure('Invalid parameters'));
   }
 
-  return callback(null, success({ token: sign() }));
+  return callback(null, success({ token: sign(user) }));
 };

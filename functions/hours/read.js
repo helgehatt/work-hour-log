@@ -1,13 +1,12 @@
 const faunadb = require('faunadb'), q = faunadb.query;
-const { client, success, failure } = require('../common');
-const { unpack } = require('./util');
+const { client, success, failure, unpack } = require('../common');
 
-exports.main = async () => {
+exports.main = async ({ userId }) => {
   try {
     const response = await client.query(q.Map(
-      q.Paginate(q.Documents(q.Collection('hours'))),
+      q.Paginate(q.Match(q.Index('hours-by-userId'), userId)),
       q.Lambda('i', q.Get(q.Var('i'))),
-    ));    
+    ));
     return success(transform(response));
   } catch (error) {
     return failure(error);

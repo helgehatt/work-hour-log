@@ -1,17 +1,22 @@
 const faunadb = require('faunadb'), q = faunadb.query;
 const crypto = require('crypto');
-const { client } = require('../common');
+const { client, unpack } = require('../common');
 
 exports.verify = async ({ username, password }) => {
   try {
-    const dbEntry = await client.query(
-      q.Get(q.Match(q.Index('username'), username)),
-    ).then(response => response.data);
+    const entry = await client.query(
+      q.Get(q.Match(q.Index('user-by-username'), username)),
+    ).then(unpack);
 
-    const hash = crypto.pbkdf2Sync(password, dbEntry.salt, 10000, 64, 'sha512');
+    const hash = crypto.pbkdf2Sync(password, entry.salt, 10000, 64, 'sha512');
   
-    return dbEntry.password === hash.toString('base64');    
+    if (entry.password === hash.toString('base64')) {
+      return {
+        sub: entry.id,
+        name: entry.username,
+      }
+    }
   } catch (error) {
-    return false;
+    // Ignore error
   }
 };

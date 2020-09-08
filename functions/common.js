@@ -13,14 +13,20 @@ const headers = {
 }
 
 exports.verify = (headers) => {
-  if (!headers['authorization']) throw new Error('authorization header missing');
+  if (!headers['authorization']) {
+    throw new Error('authorization header missing');
+  }
 
   const [type, credentials] = headers['authorization'].split(' ');
 
-  return type === 'Bearer' && jwt.verify(credentials);
+  if (type !== 'Bearer' || credentials == null) {
+    throw new Error('authorization credentials missing')
+  }
+
+  return jwt.verify(credentials);
 };
 
-exports.sign = () => jwt.sign();
+exports.sign = jwt.sign;
 
 exports.success = (response, statusCode = 200) => {
   const body = JSON.stringify(typeof response === 'object' ? response : { 
@@ -30,8 +36,12 @@ exports.success = (response, statusCode = 200) => {
 };
 
 exports.failure = (error, statusCode = 400) => {
-  const body = JSON.stringify({
-    message: error instanceof Error ? error.message : String(error || 'Unknown'),
+  const body = JSON.stringify(error instanceof Error ? {
+    message: error.message,
+  } : typeof error === 'object' ? error : {
+    message: error || 'Unknown',
   });
   return ({ statusCode, body, headers });
 };
+
+exports.unpack = ({ ref, data }) => ({ id: ref.id, ...data });

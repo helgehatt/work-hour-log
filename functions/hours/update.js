@@ -1,8 +1,7 @@
 const faunadb = require('faunadb'), q = faunadb.query;
-const { client, success, failure } = require('../common');
-const { unpack } = require('./util');
+const { client, success, failure, unpack } = require('../common');
 
-exports.main = async ({ id, start, stop }) => {
+exports.main = async ({ userId, id, start, stop }) => {
   if (!id || !start || !stop) {
     return failure('Missing parameters');
   }
@@ -12,11 +11,20 @@ exports.main = async ({ id, start, stop }) => {
   }
 
   try {
+    const entry = await client.query(q.Get(
+      q.Ref(q.Collection('hours'), id)
+    )).then(unpack);
+
+    if (entry.userId !== userId) {
+      return failure({ entry, userId });
+    }
+
     const response = await client.query(q.Update(
       q.Ref(q.Collection('hours'), id), 
-      { data: { start, stop } },
-    ));    
-    return success(unpack(response));
+      { data: { userId, start, stop } },
+    )).then(unpack);
+    
+    return success(response);
   } catch (error) {
     return failure(error);
   }

@@ -47,6 +47,7 @@ export const useCalenderAPI = () => {
     create: wrapper(API.create),
     delete: wrapper(API.delete),
     update: wrapper(API.update),
+    login: wrapper(API.login),
   };
 };
 

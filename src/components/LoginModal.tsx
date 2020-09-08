@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { withFormData, createFormData } from 'src/components/util/withFormData';
 import { useModal } from 'src/components/providers/ModalProvider';
 import Modal from 'src/components/Modal';
-import API from 'src/components/util/API';
+import { useCalenderAPI } from 'src/components/providers/CalenderProvider';
 
 const Root = styled(Modal)`
   form > div {
@@ -19,6 +19,7 @@ const scheme = createFormData({
 
 const LoginModal: React.FC = withFormData(scheme)(({ data }) => {
   const { hideModal } = useModal();
+  const API = useCalenderAPI();
 
   const [error, setError] = React.useState('');
 

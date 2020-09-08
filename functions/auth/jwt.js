@@ -15,7 +15,6 @@ exports.sign = (payload) => {
 
   const base64Payload = base64Encode({
     ...payload,
-    sub: "userID",
     iat: Math.floor(Date.now() / 1000),
     exp: Math.floor(Date.now() / 1000) + (3600 * 24),
   });

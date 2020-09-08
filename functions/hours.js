@@ -13,12 +13,13 @@ exports.handler = async (event, context, callback) => {
 
   try {
     const payload = verify(event.headers);
+
+    return callback(null, await API[event.httpMethod]({
+      ...JSON.parse(event.body || '{}'),
+      ...event.queryStringParameters,
+      userId: payload.sub,
+    }));
   } catch (error) {
     return callback(null, failure(error, 401));
   }
-
-  return callback(null, await API[event.httpMethod]({
-    ...JSON.parse(event.body || '{}'),
-    ...event.queryStringParameters,
-  }));
 };
