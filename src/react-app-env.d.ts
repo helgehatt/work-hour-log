@@ -6,4 +6,6 @@ interface WorkHourEntry {
   stop: string
 }
 
-interface WorkHourLog extends Record<string, Record<string, WorkHourEntry>> {}
+interface WorkHourDay extends Record<string, WorkHourEntry> {}
+interface WorkHourMonth extends Record<string, WorkHourDay> {}
+interface WorkHourLog extends Record<string, WorkHourMonth> {}

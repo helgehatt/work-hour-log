@@ -16,14 +16,14 @@ exports.main = async ({ userId, id, start, stop }) => {
     )).then(unpack);
 
     if (entry.userId !== userId) {
-      return failure({ entry, userId });
+      return failure('Invalid parameters');
     }
 
     const response = await client.query(q.Update(
       q.Ref(q.Collection('hours'), id), 
-      { data: { userId, start, stop } },
+      { data: { start, stop, userId } },
     )).then(unpack);
-    
+
     return success(response);
   } catch (error) {
     return failure(error);

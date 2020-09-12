@@ -13,7 +13,7 @@ exports.main = async ({ userId, start, stop }) => {
   try {
     const response = await client.query(q.Create(
       q.Collection('hours'), 
-      { data: { userId, start, stop } }
+      { data: { start, stop, userId } }
     )).then(unpack);
 
     return success(response);

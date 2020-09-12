@@ -45,7 +45,7 @@ const login = (username: string, password: string) => _fetch('login', {
   return response;
 });
 
-const read = (): Promise<WorkHourLog> => _fetch('hours', {
+const read = (month: string): Promise<WorkHourMonth> => _fetch('hours?month=' + month, {
   method: 'GET',
 });
 

@@ -1,10 +1,14 @@
 const faunadb = require('faunadb'), q = faunadb.query;
 const { client, success, failure, unpack } = require('../common');
 
-exports.main = async ({ userId }) => {
+exports.main = async ({ userId, month }) => {
+  if (!month) {
+    return failure('Missing parameters');
+  }
+  
   try {
     const response = await client.query(q.Map(
-      q.Paginate(q.Match(q.Index('hours-by-userId'), userId)),
+      q.Paginate(q.Match(q.Index('hours-by-month'), [userId, month])),
       q.Lambda('i', q.Get(q.Var('i'))),
     ));
     return success(transform(response));

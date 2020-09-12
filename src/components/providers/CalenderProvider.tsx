@@ -7,7 +7,7 @@ const today = moment().format(moment.HTML5_FMT.DATE);
 const CalenderContext = React.createContext({
   month: moment().format(moment.HTML5_FMT.MONTH),
   hours: {} as WorkHourLog,
-  loadHours: (): void => { throw new Error('Invalid context') },
+  loadMonth: (): void => { throw new Error('Invalid context') },
   prevMonth: (): void => { throw new Error('Invalid context') },
   nextMonth: (): void => { throw new Error('Invalid context') },
   currentMonth: (): void => { throw new Error('Invalid context') },
@@ -21,14 +21,14 @@ const CalenderProvider: React.FC = ({ children }) => {
   const currentMonth = () => setMonth(moment(today).format(moment.HTML5_FMT.MONTH));
   const prevMonth = () => setMonth(moment(month).subtract(1, 'month').format(moment.HTML5_FMT.MONTH));
   const nextMonth = () => setMonth(moment(month).add(1, 'month').format(moment.HTML5_FMT.MONTH));
-  const loadHours = () => API.read().then(setHours);
+  const loadMonth = () => API.read(month).then(response => setHours(prev => ({ ...prev, [month]: response })));
 
   React.useEffect(() => {
-    if (API.isAuthenticated()) loadHours();
-  }, []);
+    if (API.isAuthenticated() && hours[month] == null) loadMonth();
+  });
 
   return (
-    <CalenderContext.Provider value={{ month, hours, loadHours, currentMonth, prevMonth, nextMonth }}>
+    <CalenderContext.Provider value={{ month, hours, loadMonth, currentMonth, prevMonth, nextMonth }}>
       {children}
     </CalenderContext.Provider>
   );
@@ -39,7 +39,7 @@ export const useCalenderAPI = () => {
   
   const wrapper = <Fn extends (...args: any) => Promise<any>>(fn: Fn) => {
     return (...args: Parameters<Fn>): Promise<void> => {
-      return fn(...args).then(context.loadHours);
+      return fn(...args).then(context.loadMonth);
     };
   };
 
@@ -61,10 +61,12 @@ export const useCalenderNav = () => {
   };
 };
 
-export const useCalenderSum = () => {
+export const useCalenderSum = (month?: string) => {
   const context = React.useContext(CalenderContext);
 
-  const entries = Object.values(context.hours).reduce((acc, day) => {
+  const hours = context.hours[month || context.month];
+
+  const entries = Object.values(hours || {}).reduce((acc, day) => {
     acc.push(...Object.values(day));
     return acc;
   }, [] as Array<WorkHourEntry>);
@@ -74,7 +76,7 @@ export const useCalenderSum = () => {
   }, 0);
 
   const breaks = entries.reduce((acc, entry) => {
-    return acc + Number(moment(entry.stop).diff(entry.start, 'minutes') > 5.5 * 60);
+    return acc + Number(moment(entry.stop).diff(entry.start, 'minutes') >= 6 * 60);
   }, 0);
 
   return {
@@ -85,10 +87,11 @@ export const useCalenderSum = () => {
 
 export const useCalenderDate = (date: string) => {
   const context = React.useContext(CalenderContext);
+  const month = date.substr(0, 7);
   return {
     isToday: date === today,
-    isActive: date.startsWith(context.month),
-    hours: Object.values(context.hours[date] || {}),
+    isActive: month === context.month,
+    hours: Object.values(context.hours[month]?.[date] || {}),
   };
 };
 
