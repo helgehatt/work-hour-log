@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { withFormData, createFormData } from 'src/components/util/withFormData';
+import { withFormData, createFormScheme } from 'src/components/util/withFormData';
 import { useModal } from 'src/components/providers/ModalProvider';
 import Modal from 'src/components/Modal';
 import { useCalenderAPI } from 'src/components/providers/CalenderProvider';
@@ -12,7 +12,7 @@ const Root = styled(Modal)`
   }
 `;
 
-const scheme = createFormData({
+const scheme = createFormScheme({
   'username': { value: '' },
   'password': { value: '' },
 });
