@@ -2,8 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import TimeSelect from 'src/components/TimeSelect';
 import moment from 'moment';
-import { useModal } from 'src/components/providers/ModalProvider';
-import { useCalenderAPI } from 'src/components/providers/CalenderProvider';
+import { useAPIDispatch, APIActions } from 'src/components/providers/APIProvider';
 import Modal from 'src/components/Modal';
 
 interface IProps {
@@ -18,20 +17,15 @@ const EditEntryModal: React.FC<IProps> = ({ entry }) => {
   const [start] = React.useState(moment.utc(entry.start));
   const [stop] = React.useState(moment.utc(entry.stop));
 
-  const API = useCalenderAPI();
-  const { hideModal } = useModal();
+  const APIDispatch = useAPIDispatch();
 
-  const handleUpdate = () => {
-    API.update({
-      id: entry.id,
-      start: start.toISOString(),
-      stop: stop.toISOString(),
-    }).then(hideModal);
-  };
+  const handleUpdate = () => APIDispatch(APIActions.hours.update({
+    id: entry.id,
+    start: start.toISOString(),
+    stop: stop.toISOString(),
+  }));
 
-  const handleDelete = () => {
-    API.delete(entry.id).then(hideModal);
-  };
+  const handleDelete = () => APIDispatch(APIActions.hours.delete({ id: entry.id }));
 
   return (
     <Root>

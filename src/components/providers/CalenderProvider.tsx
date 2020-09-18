@@ -1,13 +1,13 @@
 import React from 'react';
-import API from 'src/components/util/API';
 import moment from 'moment';
+import { useAPIDispatch, useAPIEvent, APIConstants, APIActions, APIToken } from './APIProvider';
+import { useModal } from './ModalProvider';
 
 const today = moment().format(moment.HTML5_FMT.DATE);
 
 const CalenderContext = React.createContext({
   month: moment().format(moment.HTML5_FMT.MONTH),
   hours: {} as WorkHourLog,
-  loadMonth: (): void => { throw new Error('Invalid context') },
   prevMonth: (): void => { throw new Error('Invalid context') },
   nextMonth: (): void => { throw new Error('Invalid context') },
   currentMonth: (): void => { throw new Error('Invalid context') },
@@ -21,34 +21,43 @@ const CalenderProvider: React.FC = ({ children }) => {
   const currentMonth = () => setMonth(moment(today).format(moment.HTML5_FMT.MONTH));
   const prevMonth = () => setMonth(moment(month).subtract(1, 'month').format(moment.HTML5_FMT.MONTH));
   const nextMonth = () => setMonth(moment(month).add(1, 'month').format(moment.HTML5_FMT.MONTH));
-  const loadMonth = () => API.read(month).then(response => setHours(prev => ({ ...prev, [month]: response })));
+
+  const APIDispatch = useAPIDispatch();
+  const APIEvent = useAPIEvent();
+  const { hideModal } = useModal();
 
   React.useEffect(() => {
-    if (API.isAuthenticated() && hours[month] == null) loadMonth();
-  });
+    switch (APIEvent.type) {
+      case APIConstants.auth.AUTH_LOGIN_SUCCESS:
+        APIToken.set(APIEvent.payload.token); // eslint-disable no-fallthrough
+      case APIConstants.hours.HOURS_CREATE_SUCCESS:
+      case APIConstants.hours.HOURS_DELETE_SUCCESS:
+      case APIConstants.hours.HOURS_UPDATE_SUCCESS:
+        APIDispatch(APIActions.hours.read({ month }));
+        break;
+    }
+  }, [APIDispatch, APIEvent, month]);
+
+  React.useEffect(() => {
+    switch (APIEvent.type) {
+      case APIConstants.hours.HOURS_READ_SUCCESS:
+        setHours(prev => ({ ...prev, [APIEvent.request.month]: APIEvent.response }));
+        hideModal();
+        break;
+    }
+  }, [APIDispatch, APIEvent, hideModal]);
+
+  React.useEffect(() => {
+    if (APIToken.isAuthenticated() && hours[month] == null) {
+      APIDispatch(APIActions.hours.read({ month }));
+    }
+  }, [APIDispatch, hours, month]);
 
   return (
-    <CalenderContext.Provider value={{ month, hours, loadMonth, currentMonth, prevMonth, nextMonth }}>
+    <CalenderContext.Provider value={{ month, hours, currentMonth, prevMonth, nextMonth }}>
       {children}
     </CalenderContext.Provider>
   );
-};
-
-export const useCalenderAPI = () => {
-  const context = React.useContext(CalenderContext);
-  
-  const wrapper = <Fn extends (...args: any) => Promise<any>>(fn: Fn) => {
-    return (...args: Parameters<Fn>): Promise<void> => {
-      return fn(...args).then(context.loadMonth);
-    };
-  };
-
-  return {
-    create: wrapper(API.create),
-    delete: wrapper(API.delete),
-    update: wrapper(API.update),
-    login: wrapper(API.login),
-  };
 };
 
 export const useCalenderNav = () => {

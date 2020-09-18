@@ -1,9 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
 import { withFormData, createFormScheme } from 'src/components/util/withFormData';
-import { useModal } from 'src/components/providers/ModalProvider';
+import { useAPIDispatch, APIActions, useAPIEvent, APIConstants } from 'src/components/providers/APIProvider';
 import Modal from 'src/components/Modal';
-import { useCalenderAPI } from 'src/components/providers/CalenderProvider';
 
 const Root = styled(Modal)`
   form > div {
@@ -18,17 +17,24 @@ const scheme = createFormScheme({
 });
 
 const LoginModal: React.FC = withFormData(scheme)(({ data }) => {
-  const { hideModal } = useModal();
-  const API = useCalenderAPI();
+  const APIDispatch = useAPIDispatch();
+  const APIEvent = useAPIEvent();
 
   const [error, setError] = React.useState('');
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
-    API.login(data.username.value, data.password.value)
-      .then(hideModal)
-      .catch(() => setError('Invalid password'))
+    APIDispatch(APIActions.auth.login({ 
+      username: data.username.value, 
+      password: data.password.value,
+    }));
   };
+
+  React.useEffect(() => {
+    if (APIEvent?.type === APIConstants.auth.AUTH_LOGIN_FAILURE) {
+      setError('Invalid username or password');
+    }
+  }, [APIEvent]);
 
   return (
     <Root>

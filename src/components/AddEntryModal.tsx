@@ -2,9 +2,8 @@ import React from 'react';
 import styled from 'styled-components';
 import TimeSelect from 'src/components/TimeSelect';
 import moment from 'moment';
-import { useModal } from 'src/components/providers/ModalProvider';
-import { useCalenderAPI } from 'src/components/providers/CalenderProvider';
 import Modal from 'src/components/Modal';
+import { useAPIDispatch, APIActions } from './providers/APIProvider';
 
 interface IProps {
   date: string
@@ -18,15 +17,12 @@ const AddEntryModal: React.FC<IProps> = ({ date }) => {
   const [start] = React.useState(moment.utc(date).hour(9).startOf('hour'));
   const [stop] = React.useState(moment.utc(date).hour(16).startOf('hour'));
 
-  const API = useCalenderAPI();
-  const { hideModal } = useModal();
+  const APIDispatch = useAPIDispatch();
   
-  const handleAdd = () => {
-    API.create({
-      start: start.toISOString(),
-      stop: stop.toISOString(),
-    }).then(hideModal);
-  };
+  const handleAdd = () => APIDispatch(APIActions.hours.create({
+    start: start.toISOString(),
+    stop: stop.toISOString(),
+  }));
 
   return (
     <Root>
