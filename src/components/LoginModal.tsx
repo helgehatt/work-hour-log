@@ -1,9 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
-import { withFormData, createFormData } from 'src/components/util/withFormData';
-import { useModal } from 'src/components/providers/ModalProvider';
+import { withFormData, createFormScheme } from 'src/components/util/withFormData';
+import { useDispatch } from 'src/components/AppProviders/EventProvider';
 import Modal from 'src/components/Modal';
-import { useCalenderAPI } from 'src/components/providers/CalenderProvider';
+import API from 'src/API';
 
 const Root = styled(Modal)`
   form > div {
@@ -12,23 +12,32 @@ const Root = styled(Modal)`
   }
 `;
 
-const scheme = createFormData({
+const scheme = createFormScheme({
   'username': { value: '' },
   'password': { value: '' },
 });
 
 const LoginModal: React.FC = withFormData(scheme)(({ data }) => {
-  const { hideModal } = useModal();
-  const API = useCalenderAPI();
+  const dispatch = useDispatch();
 
   const [error, setError] = React.useState('');
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
-    API.login(data.username.value, data.password.value)
-      .then(hideModal)
-      .catch(() => setError('Invalid password'))
+    dispatch(API.actions.auth.login({ 
+      username: data.username.value, 
+      password: data.password.value,
+    }));
   };
+
+  React.useEffect(() => {
+    const fn = API.subscriptions.add(event => {
+      if (event?.type === API.constants.auth.AUTH_LOGIN_FAILURE) {
+        setError('Invalid username or password');
+      }
+    });
+    return () => API.subscriptions.remove(fn);
+  }, []);
 
   return (
     <Root>

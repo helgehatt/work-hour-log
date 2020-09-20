@@ -1,5 +1,4 @@
 import React from 'react';
-import API from 'src/components/util/API';
 import moment from 'moment';
 
 const today = moment().format(moment.HTML5_FMT.DATE);
@@ -7,49 +6,32 @@ const today = moment().format(moment.HTML5_FMT.DATE);
 const CalenderContext = React.createContext({
   month: moment().format(moment.HTML5_FMT.MONTH),
   hours: {} as WorkHourLog,
-  loadMonth: (): void => { throw new Error('Invalid context') },
   prevMonth: (): void => { throw new Error('Invalid context') },
   nextMonth: (): void => { throw new Error('Invalid context') },
   currentMonth: (): void => { throw new Error('Invalid context') },
+  addHours: (month: string, hours: WorkHourMonth): void => { throw new Error('Invalid context') },
 });
 
 
 const CalenderProvider: React.FC = ({ children }) => {
   const initial = React.useContext(CalenderContext);
-  const [month, setMonth] = React.useState(initial.month)
+  const [month, setMonth] = React.useState(initial.month);
   const [hours, setHours] = React.useState<WorkHourLog>(initial.hours);
   const currentMonth = () => setMonth(moment(today).format(moment.HTML5_FMT.MONTH));
   const prevMonth = () => setMonth(moment(month).subtract(1, 'month').format(moment.HTML5_FMT.MONTH));
-  const nextMonth = () => setMonth(moment(month).add(1, 'month').format(moment.HTML5_FMT.MONTH));
-  const loadMonth = () => API.read(month).then(response => setHours(prev => ({ ...prev, [month]: response })));
-
-  React.useEffect(() => {
-    if (API.isAuthenticated() && hours[month] == null) loadMonth();
-  });
+  const nextMonth = () => setMonth(moment(month).add(1, 'month').format(moment.HTML5_FMT.MONTH));  
+  const addHours = React.useCallback((month: string, hours: WorkHourMonth) => {
+    setHours(prev => ({ ...prev, [month]: hours }));
+  }, []);
 
   return (
-    <CalenderContext.Provider value={{ month, hours, loadMonth, currentMonth, prevMonth, nextMonth }}>
+    <CalenderContext.Provider value={{ month, hours, currentMonth, prevMonth, nextMonth, addHours }}>
       {children}
     </CalenderContext.Provider>
   );
 };
 
-export const useCalenderAPI = () => {
-  const context = React.useContext(CalenderContext);
-  
-  const wrapper = <Fn extends (...args: any) => Promise<any>>(fn: Fn) => {
-    return (...args: Parameters<Fn>): Promise<void> => {
-      return fn(...args).then(context.loadMonth);
-    };
-  };
-
-  return {
-    create: wrapper(API.create),
-    delete: wrapper(API.delete),
-    update: wrapper(API.update),
-    login: wrapper(API.login),
-  };
-};
+export const useCalender = () => React.useContext(CalenderContext);
 
 export const useCalenderNav = () => {
   const context = React.useContext(CalenderContext);

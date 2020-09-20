@@ -1,9 +1,9 @@
 import React from 'react';
 import styled, { css } from 'styled-components';
 import constants from 'src/components/util/constants';
-import { useCalenderDate } from 'src/components/providers/CalenderProvider';
+import { useCalenderDate } from 'src/components/AppProviders/CalenderProvider';
 import CalenderEntry from 'src/components/CalenderEntry';
-import { useModal } from 'src/components/providers/ModalProvider';
+import { useModal } from 'src/components/AppProviders/ModalProvider';
 import AddEntryModal from 'src/components/AddEntryModal';
 
 interface IProps {

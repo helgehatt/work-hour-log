@@ -1,16 +1,16 @@
 import React from 'react';
-import CalenderProvider from 'src/components/providers/CalenderProvider';
-import ModalProvider from 'src/components/providers/ModalProvider';
+import AppProviders from 'src/components/AppProviders';
 import CalenderView from 'src/components/CalenderView';
+import AppEffects from './components/AppEffects';
 
 const App: React.FC = () => {
   return (
-    <CalenderProvider>
-      <ModalProvider>
+    <AppProviders>
+      <AppEffects>
         <CalenderView />
-      </ModalProvider>
-    </CalenderProvider>
+      </AppEffects>
+    </AppProviders>
   );
-}
+};
 
 export default App;

@@ -1,6 +1,6 @@
 import React from 'react';
 import Modal from 'src/components/Modal';
-import { useCalenderSum } from 'src/components/providers/CalenderProvider';
+import { useCalenderSum } from 'src/components/AppProviders/CalenderProvider';
 import styled from 'styled-components';
 
 const Root = styled(Modal)`
