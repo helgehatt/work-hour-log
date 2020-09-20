@@ -1,23 +1,36 @@
 import auth from 'src/API/auth';
 import hours from 'src/API/hours';
-export { default as token } from 'src/API/token';
+import token from 'src/API/token';
+import Subscriptions from 'src/API/Subscriptions';
 
-export const actions = {
+export type APIEvent = (
+  Parameter<typeof auth['handler']> | PromiseType<ReturnType<typeof auth['handler']>> |
+  Parameter<typeof hours['handler']> | PromiseType<ReturnType<typeof hours['handler']>>
+);
+
+export type APIAction = (event: APIEvent) => void;
+
+const actions = {
   auth: auth.actions,
   hours: hours.actions,
 };
 
-export const constants = {
+const constants = {
   auth: auth.constants,
   hours: hours.constants,
 };
 
-export const handlers = {
-  auth: auth.handler,
-  hours: hours.handler,
-};
-
-export type ActionType = (
-  Parameter<typeof auth['handler']> | PromiseType<ReturnType<typeof auth['handler']>> |
-  Parameter<typeof hours['handler']> | PromiseType<ReturnType<typeof hours['handler']>>
+const handler = (event: any): Promise<APIEvent> | undefined => (
+  auth.handler(event) ||
+  hours.handler(event)
 );
+
+const subscriptions = new Subscriptions<APIAction>();
+
+export default {
+  actions,
+  constants,
+  handler,
+  token,
+  subscriptions,
+}

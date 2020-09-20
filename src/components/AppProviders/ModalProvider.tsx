@@ -14,7 +14,7 @@ const ModalProvider: React.FC = ({ children }) => {
   return (
     <ModalContext.Provider value={{
       showModal: setComponent,
-      hideModal: () => setComponent(null),
+      hideModal: React.useCallback(() => setComponent(null), []),
     }}>
       {children}
       {component}

@@ -1,8 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
 import { withFormData, createFormScheme } from 'src/components/util/withFormData';
-import { useAPIDispatch, APIActions, useAPIEvent, APIConstants } from 'src/components/providers/APIProvider';
+import { useDispatch } from 'src/components/AppProviders/EventProvider';
 import Modal from 'src/components/Modal';
+import API from 'src/API';
 
 const Root = styled(Modal)`
   form > div {
@@ -17,24 +18,26 @@ const scheme = createFormScheme({
 });
 
 const LoginModal: React.FC = withFormData(scheme)(({ data }) => {
-  const APIDispatch = useAPIDispatch();
-  const APIEvent = useAPIEvent();
+  const dispatch = useDispatch();
 
   const [error, setError] = React.useState('');
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
-    APIDispatch(APIActions.auth.login({ 
+    dispatch(API.actions.auth.login({ 
       username: data.username.value, 
       password: data.password.value,
     }));
   };
 
   React.useEffect(() => {
-    if (APIEvent?.type === APIConstants.auth.AUTH_LOGIN_FAILURE) {
-      setError('Invalid username or password');
-    }
-  }, [APIEvent]);
+    const fn = API.subscriptions.add(event => {
+      if (event?.type === API.constants.auth.AUTH_LOGIN_FAILURE) {
+        setError('Invalid username or password');
+      }
+    });
+    return () => API.subscriptions.remove(fn);
+  }, []);
 
   return (
     <Root>

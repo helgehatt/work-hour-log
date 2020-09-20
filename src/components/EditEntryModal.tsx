@@ -2,8 +2,9 @@ import React from 'react';
 import styled from 'styled-components';
 import TimeSelect from 'src/components/TimeSelect';
 import moment from 'moment';
-import { useAPIDispatch, APIActions } from 'src/components/providers/APIProvider';
+import { useDispatch } from 'src/components/AppProviders/EventProvider';
 import Modal from 'src/components/Modal';
+import API from 'src/API';
 
 interface IProps {
   entry: WorkHourEntry
@@ -17,15 +18,15 @@ const EditEntryModal: React.FC<IProps> = ({ entry }) => {
   const [start] = React.useState(moment.utc(entry.start));
   const [stop] = React.useState(moment.utc(entry.stop));
 
-  const APIDispatch = useAPIDispatch();
+  const dispatch = useDispatch();
 
-  const handleUpdate = () => APIDispatch(APIActions.hours.update({
+  const handleUpdate = () => dispatch(API.actions.hours.update({
     id: entry.id,
     start: start.toISOString(),
     stop: stop.toISOString(),
   }));
 
-  const handleDelete = () => APIDispatch(APIActions.hours.delete({ id: entry.id }));
+  const handleDelete = () => dispatch(API.actions.hours.delete({ id: entry.id }));
 
   return (
     <Root>

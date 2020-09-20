@@ -1,4 +1,4 @@
-import { request } from 'src/API/common';
+import request from 'src/API/request';
 
 const read = (data: { month: string }) => request<WorkHourMonth>('hours?month=' + data.month, {
   method: 'GET',

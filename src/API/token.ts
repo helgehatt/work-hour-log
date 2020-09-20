@@ -13,11 +13,11 @@ const payload = () => {
   return base64Decode(token.split('.')[1]);
 }
 
-const isAuthenticated = () => payload()?.exp > (Date.now() / 1000);
+const isValid = () => payload()?.exp > (Date.now() / 1000);
 
 export default {
   get,
   set,
   payload,
-  isAuthenticated,
+  isValid,
 };

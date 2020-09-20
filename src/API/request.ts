@@ -4,7 +4,7 @@ const baseURL = process.env.NODE_ENV === 'development'
   ? 'http://localhost:8888/.netlify/functions/'
   : 'https://work-hour-log.netlify.app/.netlify/functions/';
 
-const handleRequest = ({ headers, ...options }: RequestInit): RequestInit => ({
+const handleOptions = ({ headers, ...options }: RequestInit): RequestInit => ({
   headers: {
     'Authorization': 'Bearer ' + token.get(),
     'Content-Type': 'application/json',
@@ -19,7 +19,7 @@ const handleResponse = async <T>(response: Response) => {
   return payload as T;
 };
 
-export const request = <T = any>(url: string, options: RequestInit) => fetch(
+export default <T = any>(url: string, options: RequestInit) => fetch(
   baseURL + url,
-  handleRequest(options),
+  handleOptions(options),
 ).then(response => handleResponse<T>(response));

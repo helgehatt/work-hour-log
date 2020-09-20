@@ -1,9 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
-import { useCalenderNav } from 'src/components/providers/CalenderProvider';
+import { useCalenderNav } from 'src/components/AppProviders/CalenderProvider';
 import CalenderGrid from 'src/components/CalenderGrid';
 import constants from 'src/components/util/constants';
-import { useModal } from 'src/components/providers/ModalProvider';
+import { useModal } from 'src/components/AppProviders/ModalProvider';
 import LoginModal from 'src/components/LoginModal';
 import CalenderStatsModal from 'src/components/CalenderStatsModal';
 

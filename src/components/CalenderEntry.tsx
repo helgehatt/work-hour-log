@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { useModal } from 'src/components/providers/ModalProvider';
+import { useModal } from 'src/components/AppProviders/ModalProvider';
 import EditEntryModal from 'src/components/EditEntryModal';
 import moment from 'moment';
 

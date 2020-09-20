@@ -1,4 +1,4 @@
-import { request } from 'src/API/common';
+import request from 'src/API/request';
 
 const login = (data: { username: string, password: string }) => request<{ token: string }>('login', {
   method: 'POST',
