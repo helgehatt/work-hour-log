@@ -10,6 +10,7 @@ const handleOptions = ({ headers, ...options }: RequestInit): RequestInit => ({
     'Content-Type': 'application/json',
     ...headers,
   },
+  credentials: 'include',
   ...options,
 });
 

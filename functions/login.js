@@ -1,5 +1,7 @@
-const { success, failure, sign } = require('./common');
+const { success, failure } = require('./common');
+const jwt = require('./auth/jwt');
 const pw = require('./auth/pw');
+const session = require('./auth/session');
 
 exports.handler = async (event, context, callback) => {
   if (event.httpMethod === 'OPTIONS') {
@@ -17,6 +19,17 @@ exports.handler = async (event, context, callback) => {
   if (!user) {
     return callback(null, failure('Invalid parameters'));
   }
+  
+  const response = success({ token: jwt.sign(user) });
 
-  return callback(null, success({ token: sign(user) }));
+  const newCookie = await session.generateCookie({
+    userId: user.sub, 
+    headers: event.headers,
+  });
+
+  if (newCookie) {
+    response.headers['Set-Cookie'] = newCookie;
+  }
+
+  return callback(null, response);
 };
