@@ -6,6 +6,12 @@ const login = (payload: Parameter<typeof requests.login>) => ({
   payload,
 });
 
+const refresh = (payload: Parameter<typeof requests.refresh>) => ({
+  type: constants.AUTH_REFRESH,
+  payload,
+});
+
 export default {
   login,
+  refresh,
 };

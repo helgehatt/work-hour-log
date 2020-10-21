@@ -11,6 +11,7 @@ const CalenderEffects: React.FC = ({ children }) => {
     const fn = API.subscriptions.add(event => {
       switch (event.type) {
         case API.constants.auth.AUTH_LOGIN_SUCCESS:
+        case API.constants.auth.AUTH_REFRESH_SUCCESS:
         case API.constants.hours.HOURS_CREATE_SUCCESS:
         case API.constants.hours.HOURS_DELETE_SUCCESS:
         case API.constants.hours.HOURS_UPDATE_SUCCESS:

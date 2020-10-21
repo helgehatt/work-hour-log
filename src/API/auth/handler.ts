@@ -8,5 +8,9 @@ export default (event: ReturnType<UnionType<typeof actions>>) => {
       return requests.login(event.payload)
         .then(payload => ({ type: constants.AUTH_LOGIN_SUCCESS, payload }))
         .catch(payload => ({ type: constants.AUTH_LOGIN_FAILURE, payload }));
+    case constants.AUTH_REFRESH:
+      return requests.refresh(event.payload)
+        .then(payload => ({ type: constants.AUTH_REFRESH_SUCCESS, payload }))
+        .catch(payload => ({ type: constants.AUTH_REFRESH_FAILURE, payload }));
   }
 }

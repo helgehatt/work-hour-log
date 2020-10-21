@@ -24,7 +24,17 @@ exports.sign = (payload) => {
   return [base64Header, base64Payload, base64Signature].join('.');
 };
 
-exports.verify = (credentials) => {
+exports.verify = (headers, checkExp = true) => {
+  if (!headers['authorization']) {
+    throw new Error('Authorization header missing');
+  }
+
+  const [type, credentials] = headers['authorization'].split(' ');
+
+  if (type !== 'Bearer' || credentials == null) {
+    throw new Error('Authorization credentials missing')
+  }
+
   const [base64Header, base64Payload, base64Signature] = credentials.split('.');
 
   if (base64Signature !== encrypt([base64Header, base64Payload].join('.'))) {
@@ -33,7 +43,7 @@ exports.verify = (credentials) => {
 
   const payload = base64Decode(base64Payload);
 
-  if (payload.exp < Date.now() / 1000) {
+  if (checkExp && payload.exp < Date.now() / 1000) {
     throw new Error('JWT expired');
   }
 

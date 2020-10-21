@@ -4,5 +4,22 @@ exports.base64Encode = (input) => {
 };
 
 exports.base64Decode = (input) => {
-  return JSON.parse(Buffer.from(input, 'base64').toString('ascii'));
+  return JSON.parse(Buffer.from(input, 'base64').toString('utf8'));
+};
+
+exports.urlEncode = (input) => {
+  return String(input).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+};
+
+exports.urlDecode = (input) => {
+  const encoded = String(input).replace(/-/g, '+').replace(/_/g, '/');
+  while (encoded.length % 4) encoded += '=';
+  return encoded;
+};
+
+exports.readCookie = (input) => {
+  return String(input).split(';').reduce((acc, cookie) => {
+    const [key, value] = cookie.split('=', 2);
+    return Object.assign(acc, { [key]: value });
+  }, {});
 };

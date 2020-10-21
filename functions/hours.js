@@ -1,4 +1,5 @@
-const { success, failure, verify } = require('./common');
+const { success, failure } = require('./common');
+const jwt = require('./auth/jwt')
 const API = {
   PUT: require('./hours/update').main,
   POST: require('./hours/create').main,
@@ -12,7 +13,7 @@ exports.handler = async (event, context, callback) => {
   }
 
   try {
-    const payload = verify(event.headers);
+    const payload = jwt.verify(event.headers);
 
     return callback(null, await API[event.httpMethod]({
       ...JSON.parse(event.body || '{}'),
