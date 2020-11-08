@@ -2,7 +2,7 @@ import token from 'src/API/token';
 
 const baseURL = process.env.NODE_ENV === 'development'
   ? 'http://localhost:8888/.netlify/functions/'
-  : 'https://work-hour-log.netlify.app/.netlify/functions/';
+  : process.env.REACT_APP_URL + '.netlify/functions/';
 
 const handleOptions = ({ headers, ...options }: RequestInit): RequestInit => ({
   headers: {
