@@ -6901,6 +6901,11 @@ mini-css-extract-plugin@0.9.0:
     schema-utils "^1.0.0"
     webpack-sources "^1.1.0"
 
+minimal-form-data-hoc@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/minimal-form-data-hoc/-/minimal-form-data-hoc-1.0.0.tgz#de765e3a57a50f1e21976b58b62466caaf0ce97f"
+  integrity sha512-XFgM01S/3/rJ7ji7ZmR4xGZXgpK8p9PAqz+1453OzzMOEgLlynGcUpCKoGarrV4ZGw4x4WRLXhQ4durTx4BziQ==
+
 minimalistic-assert@^1.0.0, minimalistic-assert@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/minimalistic-assert/-/minimalistic-assert-1.0.1.tgz#2e194de044626d4a10e7f7fbc00ce73e83e4d5c7"

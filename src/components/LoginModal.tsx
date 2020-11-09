@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { withFormData, createFormScheme } from 'src/components/util/withFormData';
+import { withFormData, createFormScheme } from 'minimal-form-data-hoc';
 import { useDispatch } from 'src/components/AppProviders/EventProvider';
 import Modal from 'src/components/Modal';
 import API from 'src/API';
