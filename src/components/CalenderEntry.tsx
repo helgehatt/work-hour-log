@@ -1,13 +1,13 @@
 import React from 'react';
 import styled from 'styled-components';
-import { useModal } from 'src/components/AppProviders/ModalProvider';
-import EditEntryModal from 'src/components/EditEntryModal';
 import moment from 'moment';
+import EditEntryModal from 'src/components/EditEntryModal';
+import { useModal } from 'src/components/AppProviders/ModalProvider';
 
-const Root = styled.div`
+const Root = styled.div<{ isDefault: boolean }>`
   padding: 0rem 0.25rem 0.1rem 0.25rem;
   color: white;
-  background-color: #899cd9;
+  background-color: ${({ isDefault }) => isDefault ? '#899cd9' : '#90d989' };
 
   &:hover {
     cursor: pointer;
@@ -27,7 +27,7 @@ const CalenderEntry: React.FC<WorkHourEntry> = (entry) => {
   };
 
   return (
-    <Root onClick={handleClick}>
+    <Root isDefault={!entry.project} onClick={handleClick}>
       {start} {stop}
     </Root>
   );

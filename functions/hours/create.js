@@ -1,7 +1,7 @@
 const faunadb = require('faunadb'), q = faunadb.query;
 const { client, success, failure, unpack } = require('../common');
 
-exports.main = async ({ userId, start, stop }) => {
+exports.main = async ({ userId, start, stop, project }) => {
   if (!start || !stop) {
     return failure('Missing parameters');
   }
@@ -10,10 +10,14 @@ exports.main = async ({ userId, start, stop }) => {
     return failure('Invalid parameters');
   }
 
+  if (!(project == null || typeof project === 'string')) {
+    return failure('Invalid parameters');
+  }
+
   try {
     const response = await client.query(q.Create(
       q.Collection('hours'), 
-      { data: { start, stop, userId } }
+      { data: { start, stop, project, userId } }
     )).then(unpack);
 
     return success(response);
