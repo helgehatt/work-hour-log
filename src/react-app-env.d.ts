@@ -8,6 +8,7 @@ interface WorkHourEntry {
   id: string
   start: string
   stop: string
+  project?: string
 }
 
 interface WorkHourDay extends Record<string, WorkHourEntry> {}

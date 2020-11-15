@@ -77,4 +77,20 @@ export const useCalenderDate = (date: string) => {
   };
 };
 
+export const useCalenderProjects = () => {
+  const context = React.useContext(CalenderContext);
+
+  const projects = new Set<string>();
+
+  Object.values(context.hours || {}).forEach(month => {
+    Object.values(month).forEach(day => {
+      Object.values(day).forEach(entry => {
+        if (entry.project) projects.add(entry.project);
+      });
+    });
+  });
+  
+  return Array.from(projects);
+};
+
 export default CalenderProvider;
