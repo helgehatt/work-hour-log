@@ -3,14 +3,14 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "faunadb": "^2.14.2",
-    "minimal-form-data-hoc": "^1.0.0",
-    "moment": "^2.27.0",
-    "react": "^16.13.1",
-    "react-dom": "^16.13.1",
-    "react-scripts": "3.4.1",
-    "styled-components": "^5.1.1",
-    "typescript": "~3.7.2"
+    "faunadb": "^4.0.0",
+    "minimal-form-data-hoc": "^1.0.1",
+    "moment": "^2.29.1",
+    "react": "^17.0.1",
+    "react-dom": "^17.0.1",
+    "react-scripts": "4.0.1",
+    "styled-components": "^5.2.1",
+    "typescript": "~4.1.2"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -34,13 +34,13 @@
     ]
   },
   "devDependencies": {
-    "@testing-library/jest-dom": "^5.11.3",
-    "@testing-library/react": "^10.4.8",
-    "@testing-library/user-event": "^12.1.1",
-    "@types/jest": "^26.0.9",
-    "@types/node": "^14.0.27",
-    "@types/react": "^16.9.46",
-    "@types/react-dom": "^16.9.8",
-    "@types/styled-components": "^5.1.2"
+    "@testing-library/jest-dom": "^5.11.6",
+    "@testing-library/react": "^11.2.2",
+    "@testing-library/user-event": "^12.5.0",
+    "@types/jest": "^26.0.18",
+    "@types/node": "^14.14.11",
+    "@types/react": "^17.0.0",
+    "@types/react-dom": "^17.0.0",
+    "@types/styled-components": "^5.1.4"
   }
 }
