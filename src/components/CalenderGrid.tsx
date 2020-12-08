@@ -23,8 +23,7 @@ const Label = styled.div`
 
 const getCalenderSpan = (month: string) => {
   const start = moment(month).subtract(moment(month).isoWeekday(), 'days');
-  const days = moment(month).add(1, 'month').subtract(1, 'days').diff(start, 'days');
-  return Array.from({ length: Math.ceil(days / 7) * 7 }, (_, i) =>
+  return Array.from({ length: 6 * 7 }, (_, i) =>
     moment(start)
       .add(i + 1, 'days')
       .format(moment.HTML5_FMT.DATE)

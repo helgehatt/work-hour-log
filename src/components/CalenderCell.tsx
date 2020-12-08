@@ -14,12 +14,14 @@ const Root = styled.div<{ isToday: boolean }>`
   min-height: 5rem;
   border-right: ${constants.BORDER};
   border-bottom: ${constants.BORDER};
-  ${({ isToday }) =>
-    isToday
-      ? css`
-          background-color: ${constants.BORDER_COLOR};
-        `
-      : ''}
+  font-size: min(5vw, 1rem);
+  overflow-x: hidden;
+
+  ${({ isToday }) => isToday && `background-color: ${constants.BORDER_COLOR};`}
+
+  > div:last-child {
+    margin-bottom: 1rem;
+  }
 `;
 
 const CellLabel = styled.span<{ isActive: boolean }>`

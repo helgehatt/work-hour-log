@@ -28,7 +28,7 @@ const CalenderEntry: React.FC<WorkHourEntry> = entry => {
 
   return (
     <Root isDefault={!entry.project} onClick={handleClick}>
-      {start} {stop}
+      {start}&nbsp;{stop}
     </Root>
   );
 };
