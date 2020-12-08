@@ -6,12 +6,19 @@ const today = moment().format(moment.HTML5_FMT.DATE);
 const CalenderContext = React.createContext({
   month: moment().format(moment.HTML5_FMT.MONTH),
   hours: {} as WorkHourLog,
-  prevMonth: (): void => { throw new Error('Invalid context') },
-  nextMonth: (): void => { throw new Error('Invalid context') },
-  currentMonth: (): void => { throw new Error('Invalid context') },
-  addHours: (month: string, hours: WorkHourMonth): void => { throw new Error('Invalid context') },
+  prevMonth: (): void => {
+    throw new Error('Invalid context');
+  },
+  nextMonth: (): void => {
+    throw new Error('Invalid context');
+  },
+  currentMonth: (): void => {
+    throw new Error('Invalid context');
+  },
+  addHours: (month: string, hours: WorkHourMonth): void => {
+    throw new Error('Invalid context');
+  },
 });
-
 
 const CalenderProvider: React.FC = ({ children }) => {
   const initial = React.useContext(CalenderContext);
@@ -19,7 +26,7 @@ const CalenderProvider: React.FC = ({ children }) => {
   const [hours, setHours] = React.useState<WorkHourLog>(initial.hours);
   const currentMonth = () => setMonth(moment(today).format(moment.HTML5_FMT.MONTH));
   const prevMonth = () => setMonth(moment(month).subtract(1, 'month').format(moment.HTML5_FMT.MONTH));
-  const nextMonth = () => setMonth(moment(month).add(1, 'month').format(moment.HTML5_FMT.MONTH));  
+  const nextMonth = () => setMonth(moment(month).add(1, 'month').format(moment.HTML5_FMT.MONTH));
   const addHours = React.useCallback((month: string, hours: WorkHourMonth) => {
     setHours(prev => ({ ...prev, [month]: hours }));
   }, []);
@@ -89,7 +96,7 @@ export const useCalenderProjects = () => {
       });
     });
   });
-  
+
   return Array.from(projects);
 };
 

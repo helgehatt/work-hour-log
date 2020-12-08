@@ -15,9 +15,7 @@ const ModalEffects: React.FC = ({ children }) => {
     return () => API.subscriptions.remove(fn);
   }, [hideModal]);
 
-  return (
-    <>{children}</>
-  );
+  return <>{children}</>;
 };
 
 export default ModalEffects;

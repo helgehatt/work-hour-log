@@ -26,4 +26,4 @@ export default {
   read,
   update,
   delete: delete_,
-}
+};

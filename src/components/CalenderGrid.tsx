@@ -5,7 +5,7 @@ import CalenderCell from 'src/components/CalenderCell';
 import constants from 'src/components/util/constants';
 
 interface IProps {
-  month: string
+  month: string;
 }
 
 const Root = styled.div`
@@ -22,11 +22,12 @@ const Label = styled.div`
 `;
 
 const getCalenderSpan = (month: string) => {
-  const start = moment(month).subtract(moment(month).isoWeekday(), 'days')
-  const days = moment(month).add(1, 'month').subtract(1, 'days').diff(start, 'days')
-  return Array.from(
-    { length: Math.ceil(days / 7) * 7 }, 
-    (_, i) => moment(start).add(i + 1, 'days').format(moment.HTML5_FMT.DATE),
+  const start = moment(month).subtract(moment(month).isoWeekday(), 'days');
+  const days = moment(month).add(1, 'month').subtract(1, 'days').diff(start, 'days');
+  return Array.from({ length: Math.ceil(days / 7) * 7 }, (_, i) =>
+    moment(start)
+      .add(i + 1, 'days')
+      .format(moment.HTML5_FMT.DATE)
   );
 };
 
@@ -36,8 +37,12 @@ const CalenderGrid: React.FC<IProps> = ({ month }) => {
   const dates = getCalenderSpan(month);
   return (
     <Root>
-      {days.map(day => <Label key={day}>{day}</Label>)}
-      {dates.map(date => <CalenderCell key={date} date={date} />)}
+      {days.map(day => (
+        <Label key={day}>{day}</Label>
+      ))}
+      {dates.map(date => (
+        <CalenderCell key={date} date={date} />
+      ))}
     </Root>
   );
 };

@@ -20,14 +20,14 @@ exports.handler = async (event, context, callback) => {
     });
 
     await session.invalidate({ sessionId: oldSession.id });
-  
+
     const response = success({ token: jwt.sign(payload) });
 
-    const newCookie = await session.generateCookie({ 
-      userId: payload.sub, 
+    const newCookie = await session.generateCookie({
+      userId: payload.sub,
       headers: event.headers,
     });
-  
+
     if (newCookie) {
       response.headers['Set-Cookie'] = newCookie;
     }

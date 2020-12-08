@@ -8,12 +8,10 @@ import { useDispatch } from 'src/components/AppProviders/EventProvider';
 import { useCalenderProjects } from 'src/components/AppProviders/CalenderProvider';
 
 interface IProps {
-  entry: WorkHourEntry
+  entry: WorkHourEntry;
 }
 
-const Root = styled(Modal)`
-
-`;
+const Root = styled(Modal)``;
 
 const EditEntryModal: React.FC<IProps> = ({ entry }) => {
   const projects = useCalenderProjects();
@@ -24,20 +22,30 @@ const EditEntryModal: React.FC<IProps> = ({ entry }) => {
 
   const dispatch = useDispatch();
 
-  const handleUpdate = () => dispatch(API.actions.hours.update({
-    id: entry.id,
-    start: start.toISOString(),
-    stop: stop.toISOString(),
-    project: project || undefined,
-  }));
+  const handleUpdate = () =>
+    dispatch(
+      API.actions.hours.update({
+        id: entry.id,
+        start: start.toISOString(),
+        stop: stop.toISOString(),
+        project: project || undefined,
+      })
+    );
 
   const handleDelete = () => dispatch(API.actions.hours.delete({ id: entry.id }));
 
   return (
     <Root>
-      <div>Start:&nbsp;<TimeSelect timestamp={start} /></div>
-      <div>Stop:&nbsp;<TimeSelect timestamp={stop} /></div>
-      <div>Project:&nbsp;
+      <div>
+        Start:&nbsp;
+        <TimeSelect timestamp={start} />
+      </div>
+      <div>
+        Stop:&nbsp;
+        <TimeSelect timestamp={stop} />
+      </div>
+      <div>
+        Project:&nbsp;
         <input
           type='text'
           list='projects'
@@ -45,7 +53,9 @@ const EditEntryModal: React.FC<IProps> = ({ entry }) => {
           onChange={({ target: { value } }) => setProject(value)}
         />
         <datalist id='projects'>
-          {projects.map(project => <option key={project} value={project} />)}
+          {projects.map(project => (
+            <option key={project} value={project} />
+          ))}
         </datalist>
       </div>
       <div>

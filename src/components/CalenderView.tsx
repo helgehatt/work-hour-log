@@ -7,8 +7,7 @@ import { useModal } from 'src/components/AppProviders/ModalProvider';
 import LoginModal from 'src/components/LoginModal';
 import CalenderStatsModal from 'src/components/CalenderStatsModal';
 
-const Root = styled.div`
-`;
+const Root = styled.div``;
 
 const Button = styled.button`
   background-color: transparent;

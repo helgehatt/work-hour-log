@@ -3,9 +3,8 @@ import API from 'src/API';
 import { useDispatch } from 'src/components/AppProviders/EventProvider';
 
 const AuthEffects: React.FC = ({ children }) => {
-
   const dispatch = useDispatch();
-  
+
   React.useEffect(() => {
     const fn = API.subscriptions.add(event => {
       switch (event.type) {
@@ -21,11 +20,9 @@ const AuthEffects: React.FC = ({ children }) => {
     if (API.token.get() != null && !API.token.isValid()) {
       dispatch(API.actions.auth.refresh({}));
     }
-  }, [dispatch])
+  }, [dispatch]);
 
-  return (
-    <>{children}</>    
-  );
+  return <>{children}</>;
 };
 
 export default AuthEffects;

@@ -13,8 +13,8 @@ const Root = styled(Modal)`
 `;
 
 const scheme = createFormScheme({
-  'username': { value: '' },
-  'password': { value: '' },
+  username: { value: '' },
+  password: { value: '' },
 });
 
 const LoginModal: React.FC = withFormData(scheme)(({ data }) => {
@@ -24,10 +24,12 @@ const LoginModal: React.FC = withFormData(scheme)(({ data }) => {
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
-    dispatch(API.actions.auth.login({ 
-      username: data.username.value, 
-      password: data.password.value,
-    }));
+    dispatch(
+      API.actions.auth.login({
+        username: data.username.value,
+        password: data.password.value,
+      })
+    );
   };
 
   React.useEffect(() => {
@@ -45,22 +47,14 @@ const LoginModal: React.FC = withFormData(scheme)(({ data }) => {
       <form onSubmit={handleSubmit}>
         <div>
           Username:&nbsp;
-          <input 
-            type='text' 
-            value={data.username.value} 
-            onChange={data.username.onChange}
-          />
+          <input type='text' value={data.username.value} onChange={data.username.onChange} />
         </div>
         <div>
           Password:&nbsp;
-          <input 
-            type='password' 
-            value={data.password.value} 
-            onChange={data.password.onChange}
-          />
+          <input type='password' value={data.password.value} onChange={data.password.onChange} />
         </div>
         <div>
-          <span/>
+          <span />
           <button type='submit'>Submit</button>
         </div>
       </form>

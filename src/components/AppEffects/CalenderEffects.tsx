@@ -37,9 +37,7 @@ const CalenderEffects: React.FC = ({ children }) => {
     }
   }, [dispatch, hours, month]);
 
-  return (
-    <>{children}</>
-  );
+  return <>{children}</>;
 };
 
 export default CalenderEffects;

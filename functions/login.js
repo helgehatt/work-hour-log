@@ -19,11 +19,11 @@ exports.handler = async (event, context, callback) => {
   if (!user) {
     return callback(null, failure('Invalid parameters'));
   }
-  
+
   const response = success({ token: jwt.sign(user) });
 
   const newCookie = await session.generateCookie({
-    userId: user.sub, 
+    userId: user.sub,
     headers: event.headers,
   });
 

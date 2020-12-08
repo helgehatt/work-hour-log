@@ -7,14 +7,14 @@ import { useModal } from 'src/components/AppProviders/ModalProvider';
 const Root = styled.div<{ isDefault: boolean }>`
   padding: 0rem 0.25rem 0.1rem 0.25rem;
   color: white;
-  background-color: ${({ isDefault }) => isDefault ? '#899cd9' : '#90d989' };
+  background-color: ${({ isDefault }) => (isDefault ? '#899cd9' : '#90d989')};
 
   &:hover {
     cursor: pointer;
   }
 `;
 
-const CalenderEntry: React.FC<WorkHourEntry> = (entry) => {
+const CalenderEntry: React.FC<WorkHourEntry> = entry => {
   const { showModal } = useModal();
 
   const start = moment.utc(entry.start).format(moment.HTML5_FMT.TIME);

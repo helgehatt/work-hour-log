@@ -14,17 +14,23 @@ const Root = styled.div<{ isToday: boolean }>`
   min-height: 5rem;
   border-right: ${constants.BORDER};
   border-bottom: ${constants.BORDER};
-  ${({ isToday }) => isToday ? css`
-    background-color: ${constants.BORDER_COLOR};
-  ` : ''}
+  ${({ isToday }) =>
+    isToday
+      ? css`
+          background-color: ${constants.BORDER_COLOR};
+        `
+      : ''}
 `;
 
 const CellLabel = styled.span<{ isActive: boolean }>`
   font-size: 0.9rem;
   padding: 0.25rem;
-  ${({ isActive }) => !isActive ? css`
-    color: ${constants.BORDER_COLOR};
-  ` : ''}
+  ${({ isActive }) =>
+    !isActive
+      ? css`
+          color: ${constants.BORDER_COLOR};
+        `
+      : ''}
 `;
 
 const CalenderCell: React.FC<IProps> = ({ date }) => {
@@ -37,14 +43,13 @@ const CalenderCell: React.FC<IProps> = ({ date }) => {
 
   return (
     <Root isToday={isToday} onClick={handleClick}>
-      <CellLabel isActive={isActive}>
-        {Number(date.substr(8))}
-      </CellLabel>
-      {isActive && hours?.map(entry => (
-        <React.Fragment key={entry.id}>
-          <CalenderEntry {...entry} />
-        </React.Fragment>
-      ))}
+      <CellLabel isActive={isActive}>{Number(date.substr(8))}</CellLabel>
+      {isActive &&
+        hours?.map(entry => (
+          <React.Fragment key={entry.id}>
+            <CalenderEntry {...entry} />
+          </React.Fragment>
+        ))}
     </Root>
   );
 };

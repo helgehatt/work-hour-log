@@ -7,9 +7,7 @@ const AppEffects: React.FC = ({ children }) => {
   return (
     <AuthEffects>
       <ModalEffects>
-        <CalenderEffects>
-          {children}
-        </CalenderEffects>
+        <CalenderEffects>{children}</CalenderEffects>
       </ModalEffects>
     </AuthEffects>
   );

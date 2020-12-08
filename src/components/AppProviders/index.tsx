@@ -7,9 +7,7 @@ const AppProviders: React.FC = ({ children }) => {
   return (
     <EventProvider>
       <CalenderProvider>
-        <ModalProvider>
-          {children}
-        </ModalProvider>
+        <ModalProvider>{children}</ModalProvider>
       </CalenderProvider>
     </EventProvider>
   );

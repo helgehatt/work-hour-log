@@ -5,10 +5,10 @@ type UnionType<T> = T[keyof T];
 type PromiseType<T> = T extends PromiseLike<infer U> ? U : never;
 
 interface WorkHourEntry {
-  id: string
-  start: string
-  stop: string
-  project?: string
+  id: string;
+  start: string;
+  stop: string;
+  project?: string;
 }
 
 interface WorkHourDay extends Record<string, WorkHourEntry> {}
