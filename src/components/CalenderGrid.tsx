@@ -11,14 +11,19 @@ interface IProps {
 const Root = styled.div`
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  border-top: ${constants.BORDER};
-  border-left: ${constants.BORDER};
-`;
 
-const Label = styled.div`
-  text-align: center;
-  border-bottom: ${constants.BORDER};
-  border-right: ${constants.BORDER};
+  > div {
+    border-right: ${constants.BORDER};
+    border-bottom: ${constants.BORDER};
+
+    :nth-child(-n + 7) {
+      text-align: center;
+    }
+
+    :nth-child(7n + 0) {
+      border-right: none;
+    }
+  }
 `;
 
 const getCalenderSpan = (month: string) => {
@@ -37,7 +42,7 @@ const CalenderGrid: React.FC<IProps> = ({ month }) => {
   return (
     <Root>
       {days.map(day => (
-        <Label key={day}>{day}</Label>
+        <div key={day}>{day}</div>
       ))}
       {dates.map(date => (
         <CalenderCell key={date} date={date} />

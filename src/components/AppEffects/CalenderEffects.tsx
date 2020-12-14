@@ -5,8 +5,36 @@ import { useDispatch } from 'src/components/AppProviders/EventProvider';
 
 const CalenderEffects: React.FC = ({ children }) => {
   const dispatch = useDispatch();
-  const { hours, month, addHours } = useCalender();
+  const { setLoading, hours, month, addHours } = useCalender();
 
+  // Toggle loading when reading or authenticating
+  React.useEffect(() => {
+    const fn = API.subscriptions.add(event => {
+      switch (event.type) {
+        case API.constants.auth.AUTH_LOGIN:
+        case API.constants.auth.AUTH_REFRESH:
+        case API.constants.hours.HOURS_READ:
+          setLoading(true);
+      }
+    });
+    return () => API.subscriptions.remove(fn);
+  }, [setLoading]);
+
+  // Toggle loading when done reading or authenticating
+  React.useEffect(() => {
+    const fn = API.subscriptions.add(event => {
+      switch (event.type) {
+        case API.constants.auth.AUTH_LOGIN_FAILURE:
+        case API.constants.auth.AUTH_REFRESH_FAILURE:
+        case API.constants.hours.HOURS_READ_FAILURE:
+        case API.constants.hours.HOURS_READ_SUCCESS:
+          setLoading(false);
+      }
+    });
+    return () => API.subscriptions.remove(fn);
+  }, [setLoading]);
+
+  // Dispatch read action on update success
   React.useEffect(() => {
     const fn = API.subscriptions.add(event => {
       switch (event.type) {
@@ -21,6 +49,7 @@ const CalenderEffects: React.FC = ({ children }) => {
     return () => API.subscriptions.remove(fn);
   }, [dispatch, month]);
 
+  // Populate hours on read success
   React.useEffect(() => {
     const fn = API.subscriptions.add(event => {
       switch (event.type) {
@@ -31,6 +60,7 @@ const CalenderEffects: React.FC = ({ children }) => {
     return () => API.subscriptions.remove(fn);
   }, [addHours]);
 
+  // Dispatch read action if hours missing and authenticated
   React.useEffect(() => {
     if (API.token.isValid() && hours[month] == null) {
       dispatch(API.actions.hours.read({ month }));

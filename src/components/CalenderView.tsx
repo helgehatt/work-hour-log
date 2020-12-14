@@ -1,33 +1,41 @@
 import React from 'react';
 import styled from 'styled-components';
-import { useCalenderNav } from 'src/components/AppProviders/CalenderProvider';
+import { useCalender, useCalenderNav } from 'src/components/AppProviders/CalenderProvider';
 import CalenderGrid from 'src/components/CalenderGrid';
-import constants from 'src/components/util/constants';
 import { useModal } from 'src/components/AppProviders/ModalProvider';
 import LoginModal from 'src/components/LoginModal';
 import CalenderStatsModal from 'src/components/CalenderStatsModal';
+import Spinner from 'src/components/atomic/Spinner';
+import Button from 'src/components/atomic/Button';
 
-const Root = styled.div``;
+const Root = styled.div`
+  > .contents {
+    position: relative;
 
-const Button = styled.button`
-  background-color: transparent;
-  border-radius: 0.25rem;
-  border: ${constants.BORDER};
-  margin: 0.5rem 0rem 0.5rem 1rem;
-  padding: 0.5rem 1rem;
-
-  &:hover {
-    background-color: ${constants.BORDER_COLOR};
-    cursor: pointer;
+    > .overlay {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background-color: #515151;
+      opacity: 0.5;
+    }
   }
 `;
 
 const CalenderView: React.FC = () => {
   const { showModal } = useModal();
+  const { isLoading } = useCalender();
   const { activeMonth, currentMonth, prevMonth, nextMonth } = useCalenderNav();
   return (
     <Root>
-      <CalenderGrid month={activeMonth} />
+      <div className='contents'>
+        <CalenderGrid month={activeMonth} />
+        {isLoading && (
+          <div className='overlay'>
+            <Spinner />
+          </div>
+        )}
+      </div>
       <Button onClick={currentMonth}>Today</Button>
       <Button onClick={prevMonth}>Prev</Button>
       <Button onClick={nextMonth}>Next</Button>

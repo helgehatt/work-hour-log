@@ -1,5 +1,5 @@
 import React from 'react';
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 import constants from 'src/components/util/constants';
 import { useCalenderDate } from 'src/components/AppProviders/CalenderProvider';
 import CalenderEntry from 'src/components/CalenderEntry';
@@ -12,8 +12,6 @@ interface IProps {
 
 const Root = styled.div<{ isToday: boolean }>`
   min-height: 5rem;
-  border-right: ${constants.BORDER};
-  border-bottom: ${constants.BORDER};
   font-size: min(5vw, 1rem);
   overflow-x: hidden;
 
@@ -27,12 +25,7 @@ const Root = styled.div<{ isToday: boolean }>`
 const CellLabel = styled.span<{ isActive: boolean }>`
   font-size: 0.9rem;
   padding: 0.25rem;
-  ${({ isActive }) =>
-    !isActive
-      ? css`
-          color: ${constants.BORDER_COLOR};
-        `
-      : ''}
+  ${({ isActive }) => !isActive && `color: ${constants.BORDER_COLOR};`}
 `;
 
 const CalenderCell: React.FC<IProps> = ({ date }) => {

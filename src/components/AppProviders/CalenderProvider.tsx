@@ -4,6 +4,10 @@ import moment from 'moment';
 const today = moment().format(moment.HTML5_FMT.DATE);
 
 const CalenderContext = React.createContext({
+  isLoading: false,
+  setLoading: (state: boolean): void => {
+    throw new Error('Invalid context');
+  },
   month: moment().format(moment.HTML5_FMT.MONTH),
   hours: {} as WorkHourLog,
   prevMonth: (): void => {
@@ -22,6 +26,7 @@ const CalenderContext = React.createContext({
 
 const CalenderProvider: React.FC = ({ children }) => {
   const initial = React.useContext(CalenderContext);
+  const [isLoading, setLoading] = React.useState(initial.isLoading);
   const [month, setMonth] = React.useState(initial.month);
   const [hours, setHours] = React.useState<WorkHourLog>(initial.hours);
   const currentMonth = () => setMonth(moment(today).format(moment.HTML5_FMT.MONTH));
@@ -32,7 +37,9 @@ const CalenderProvider: React.FC = ({ children }) => {
   }, []);
 
   return (
-    <CalenderContext.Provider value={{ month, hours, currentMonth, prevMonth, nextMonth, addHours }}>
+    <CalenderContext.Provider
+      value={{ isLoading, setLoading, month, hours, currentMonth, prevMonth, nextMonth, addHours }}
+    >
       {children}
     </CalenderContext.Provider>
   );
