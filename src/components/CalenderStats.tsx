@@ -1,11 +1,11 @@
 import React from 'react';
-import Modal from 'src/components/Modal';
+import Modal from 'src/components/atomic/Modal';
 import { useCalenderSum } from 'src/components/AppProviders/CalenderProvider';
 import styled from 'styled-components';
 
 const Root = styled(Modal)``;
 
-const CalenderStatsModal: React.FC = () => {
+const CalenderStats: React.FC = () => {
   const { hours, breaks } = useCalenderSum();
   return (
     <Root>
@@ -15,4 +15,4 @@ const CalenderStatsModal: React.FC = () => {
   );
 };
 
-export default CalenderStatsModal;
+export default CalenderStats;

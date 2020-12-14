@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import moment from 'moment';
-import EditEntryModal from 'src/components/EditEntryModal';
+import EditEntry from 'src/components/EditEntry';
 import { useModal } from 'src/components/AppProviders/ModalProvider';
 
 const Root = styled.div<{ isDefault: boolean }>`
@@ -23,7 +23,7 @@ const CalenderEntry: React.FC<WorkHourEntry> = entry => {
   const handleClick = (event: React.SyntheticEvent) => {
     // Avoid propagation to CalenderCell
     event.stopPropagation();
-    showModal(<EditEntryModal entry={entry} />);
+    showModal(<EditEntry entry={entry} />);
   };
 
   return (

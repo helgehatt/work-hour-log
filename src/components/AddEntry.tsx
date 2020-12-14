@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import TimeSelect from 'src/components/TimeSelect';
 import moment from 'moment';
-import Modal from 'src/components/Modal';
+import Modal from 'src/components/atomic/Modal';
 import API from 'src/API';
 import { useDispatch } from 'src/components/AppProviders/EventProvider';
 import { useCalenderProjects } from 'src/components/AppProviders/CalenderProvider';
@@ -13,7 +13,7 @@ interface IProps {
 
 const Root = styled(Modal)``;
 
-const AddEntryModal: React.FC<IProps> = ({ date }) => {
+const AddEntry: React.FC<IProps> = ({ date }) => {
   const projects = useCalenderProjects();
 
   const [start] = React.useState(moment.utc(date).hour(9).startOf('hour'));
@@ -57,4 +57,4 @@ const AddEntryModal: React.FC<IProps> = ({ date }) => {
   );
 };
 
-export default AddEntryModal;
+export default AddEntry;

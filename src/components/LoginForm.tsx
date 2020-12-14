@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import { withFormData, createFormScheme } from 'minimal-form-data-hoc';
 import { useDispatch } from 'src/components/AppProviders/EventProvider';
-import Modal from 'src/components/Modal';
+import Modal from 'src/components/atomic/Modal';
 import API from 'src/API';
 
 const Root = styled(Modal)`
@@ -17,7 +17,7 @@ const scheme = createFormScheme({
   password: { value: '' },
 });
 
-const LoginModal: React.FC = withFormData(scheme)(({ data }) => {
+const LoginForm: React.FC = withFormData(scheme)(({ data }) => {
   const dispatch = useDispatch();
 
   const [error, setError] = React.useState('');
@@ -63,4 +63,4 @@ const LoginModal: React.FC = withFormData(scheme)(({ data }) => {
   );
 });
 
-export default LoginModal;
+export default LoginForm;

@@ -4,7 +4,7 @@ import constants from 'src/components/util/constants';
 import { useCalenderDate } from 'src/components/AppProviders/CalenderProvider';
 import CalenderEntry from 'src/components/CalenderEntry';
 import { useModal } from 'src/components/AppProviders/ModalProvider';
-import AddEntryModal from 'src/components/AddEntryModal';
+import AddEntry from 'src/components/AddEntry';
 
 interface IProps {
   date: string;
@@ -33,7 +33,7 @@ const CalenderCell: React.FC<IProps> = ({ date }) => {
   const { isToday, isActive, hours } = useCalenderDate(date);
 
   const handleClick = () => {
-    showModal(<AddEntryModal date={date} />);
+    showModal(<AddEntry date={date} />);
   };
 
   return (

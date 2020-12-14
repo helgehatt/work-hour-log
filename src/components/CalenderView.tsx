@@ -3,8 +3,8 @@ import styled from 'styled-components';
 import { useCalender, useCalenderNav } from 'src/components/AppProviders/CalenderProvider';
 import CalenderGrid from 'src/components/CalenderGrid';
 import { useModal } from 'src/components/AppProviders/ModalProvider';
-import LoginModal from 'src/components/LoginModal';
-import CalenderStatsModal from 'src/components/CalenderStatsModal';
+import LoginForm from 'src/components/LoginForm';
+import CalenderStats from 'src/components/CalenderStats';
 import Spinner from 'src/components/atomic/Spinner';
 import Button from 'src/components/atomic/Button';
 
@@ -39,8 +39,8 @@ const CalenderView: React.FC = () => {
       <Button onClick={currentMonth}>Today</Button>
       <Button onClick={prevMonth}>Prev</Button>
       <Button onClick={nextMonth}>Next</Button>
-      <Button onClick={() => showModal(<CalenderStatsModal />)}>Stats</Button>
-      <Button onClick={() => showModal(<LoginModal />)}>Login</Button>
+      <Button onClick={() => showModal(<CalenderStats />)}>Stats</Button>
+      <Button onClick={() => showModal(<LoginForm />)}>Login</Button>
     </Root>
   );
 };

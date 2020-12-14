@@ -1,4 +1,5 @@
 import React from 'react';
+import ModalOverlay from 'src/components/ModalOverlay';
 
 type Component = React.ReactNode;
 
@@ -22,7 +23,7 @@ const ModalProvider: React.FC = ({ children }) => {
       }}
     >
       {children}
-      {component}
+      {component && <ModalOverlay>{component}</ModalOverlay>}
     </ModalContext.Provider>
   );
 };

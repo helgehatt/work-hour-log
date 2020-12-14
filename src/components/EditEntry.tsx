@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import moment from 'moment';
 import TimeSelect from 'src/components/TimeSelect';
-import Modal from 'src/components/Modal';
+import Modal from 'src/components/atomic/Modal';
 import API from 'src/API';
 import { useDispatch } from 'src/components/AppProviders/EventProvider';
 import { useCalenderProjects } from 'src/components/AppProviders/CalenderProvider';
@@ -13,7 +13,7 @@ interface IProps {
 
 const Root = styled(Modal)``;
 
-const EditEntryModal: React.FC<IProps> = ({ entry }) => {
+const EditEntry: React.FC<IProps> = ({ entry }) => {
   const projects = useCalenderProjects();
 
   const [start] = React.useState(moment.utc(entry.start));
@@ -66,4 +66,4 @@ const EditEntryModal: React.FC<IProps> = ({ entry }) => {
   );
 };
 
-export default EditEntryModal;
+export default EditEntry;
