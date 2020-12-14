@@ -21,9 +21,11 @@ const update = (payload: Parameter<typeof requests.update>) => ({
   payload: payload,
 });
 
-export default {
+const actions = {
   create,
   read,
   update,
   delete: delete_,
 };
+
+export default actions;

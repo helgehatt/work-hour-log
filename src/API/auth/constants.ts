@@ -1,4 +1,4 @@
-export default {
+const constants = {
   AUTH_LOGIN: 'AUTH_LOGIN',
   AUTH_LOGIN_SUCCESS: 'AUTH_LOGIN_SUCCESS',
   AUTH_LOGIN_FAILURE: 'AUTH_LOGIN_FAILURE',
@@ -6,3 +6,5 @@ export default {
   AUTH_REFRESH_SUCCESS: 'AUTH_REFRESH_SUCCESS',
   AUTH_REFRESH_FAILURE: 'AUTH_REFRESH_FAILURE',
 } as const;
+
+export default constants;

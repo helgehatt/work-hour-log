@@ -17,9 +17,11 @@ const payload = () => {
 
 const isValid = () => payload()?.exp > Date.now() / 1000;
 
-export default {
+const token = {
   get,
   set,
   payload,
   isValid,
 };
+
+export default token;

@@ -11,7 +11,9 @@ const refresh = (payload: Parameter<typeof requests.refresh>) => ({
   payload,
 });
 
-export default {
+const actions = {
   login,
   refresh,
 };
+
+export default actions;

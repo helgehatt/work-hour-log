@@ -25,10 +25,12 @@ const handler = (event: any): Promise<APIEvent> | undefined => auth.handler(even
 
 const subscriptions = new Subscriptions<APIAction>();
 
-export default {
+const API = {
   actions,
   constants,
   handler,
   token,
   subscriptions,
 };
+
+export default API;

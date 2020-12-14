@@ -1,4 +1,4 @@
-export default {
+const constants = {
   HOURS_CREATE: 'HOURS_CREATE',
   HOURS_CREATE_SUCCESS: 'HOURS_CREATE_SUCCESS',
   HOURS_CREATE_FAILURE: 'HOURS_CREATE_FAILURE',
@@ -12,3 +12,5 @@ export default {
   HOURS_DELETE_SUCCESS: 'HOURS_DELETE_SUCCESS',
   HOURS_DELETE_FAILURE: 'HOURS_DELETE_FAILURE',
 } as const;
+
+export default constants;

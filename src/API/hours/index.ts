@@ -2,8 +2,10 @@ import actions from './actions';
 import constants from './constants';
 import handler from './handler';
 
-export default {
+const hours = {
   actions,
   constants,
   handler,
 };
+
+export default hours;

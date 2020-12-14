@@ -2,7 +2,7 @@ import actions from './actions';
 import constants from './constants';
 import requests from './requests';
 
-export default (event: ReturnType<UnionType<typeof actions>>) => {
+const handler = (event: ReturnType<UnionType<typeof actions>>) => {
   switch (event.type) {
     case constants.HOURS_CREATE:
       return requests
@@ -26,3 +26,5 @@ export default (event: ReturnType<UnionType<typeof actions>>) => {
         .catch(response => ({ type: constants.HOURS_DELETE_FAILURE, response, request: event.payload }));
   }
 };
+
+export default handler;

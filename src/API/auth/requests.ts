@@ -12,7 +12,9 @@ const refresh = (data: {}) =>
     body: JSON.stringify(data),
   });
 
-export default {
+const requests = {
   login,
   refresh,
 };
+
+export default requests;

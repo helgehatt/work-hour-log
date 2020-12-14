@@ -21,5 +21,7 @@ const handleResponse = async <T>(response: Response) => {
   return payload as T;
 };
 
-export default <T = any>(url: string, options: RequestInit) =>
+const request = <T = any>(url: string, options: RequestInit) =>
   fetch(baseURL + url, handleOptions(options)).then(response => handleResponse<T>(response));
+
+export default request;

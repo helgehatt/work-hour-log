@@ -22,9 +22,11 @@ const update = (data: WorkHourEntry) =>
     body: JSON.stringify(data),
   });
 
-export default {
+const requests = {
   create,
   read,
   update,
   delete: delete_,
 };
+
+export default requests;

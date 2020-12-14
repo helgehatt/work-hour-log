@@ -2,8 +2,10 @@ import actions from './actions';
 import constants from './constants';
 import handler from './handler';
 
-export default {
+const auth = {
   actions,
   constants,
   handler,
 };
+
+export default auth;

@@ -2,7 +2,7 @@ import actions from './actions';
 import constants from './constants';
 import requests from './requests';
 
-export default (event: ReturnType<UnionType<typeof actions>>) => {
+const handler = (event: ReturnType<UnionType<typeof actions>>) => {
   switch (event.type) {
     case constants.AUTH_LOGIN:
       return requests
@@ -16,3 +16,5 @@ export default (event: ReturnType<UnionType<typeof actions>>) => {
         .catch(payload => ({ type: constants.AUTH_REFRESH_FAILURE, payload }));
   }
 };
+
+export default handler;
