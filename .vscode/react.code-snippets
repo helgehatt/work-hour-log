@@ -1,0 +1,57 @@
+{
+    // https://code.visualstudio.com/docs/editor/userdefinedsnippets#_create-your-own-snippets
+    "New component": {
+        "prefix": "new-component",
+        "body": [
+            "import React from 'react';",
+            "import styled from 'styled-components';",
+            "",
+            "interface IProps {$1}",
+            "",
+            "const Root = styled.div`$2`;",
+            "",
+            "const $TM_FILENAME_BASE: React.FC<IProps> = ($3) => {$4",
+            "\treturn (",
+            "\t\t<Root>$0</Root>",
+            "\t);",
+            "};",
+            "",
+            "export default $TM_FILENAME_BASE;",
+            ""
+        ]
+    },
+    "New atomic component": {
+        "prefix": "new-atomic-component",
+        "body": [
+            "import styled from 'styled-components';",
+            "",
+            "const $TM_FILENAME_BASE = styled.${1:div}`$0`;",
+            "",
+            "export default $TM_FILENAME_BASE;",
+            ""
+        ]
+    },
+    "New provider": {
+        "prefix": "new-provider",
+        "body": [
+            "import React from 'react';",
+            "",
+            "interface IProps {$1}",
+            "",
+            "const ${TM_FILENAME_BASE/Provider//}Context = React.createContext($2);",
+            "",
+            "const $TM_FILENAME_BASE: React.FC<IProps> = ({ children }) => {$3",
+            "\treturn (",
+            "\t\t<${TM_FILENAME_BASE/Provider//}Context.Provider value={$0}>",
+            "\t\t\t{children}",
+            "\t\t</${TM_FILENAME_BASE/Provider//}Context.Provider>",
+            "\t);",
+            "};",
+            "",
+            "export const use${TM_FILENAME_BASE/Provider//} = () => React.useContext(${TM_FILENAME_BASE/Provider//}Context);",
+            "",
+            "export default $TM_FILENAME_BASE;",
+            ""
+        ]
+    }
+}

@@ -1,9 +1,11 @@
 {
-    "editor.formatOnSave": true,
     "editor.defaultFormatter": "esbenp.prettier-vscode",
-    "typescript.tsdk": "node_modules/typescript/lib",
+    "editor.formatOnSave": true,
     "prettier.arrowParens": "avoid",
     "prettier.printWidth": 120,
+    "typescript.preferences.importModuleSpecifier": "non-relative",
+    "typescript.tsdk": "node_modules/typescript/lib",
+    "typescript.updateImportsOnFileMove.enabled": "always",
     "[javascript]": {
         "editor.defaultFormatter": "esbenp.prettier-vscode",
     },
