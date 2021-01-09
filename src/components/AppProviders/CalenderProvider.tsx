@@ -8,6 +8,10 @@ const CalenderContext = React.createContext({
   setLoading: (state: boolean): void => {
     throw new Error('Invalid context');
   },
+  showDuration: false,
+  setShowDuration: (state: boolean): void => {
+    throw new Error('Invalid context');
+  },
   month: moment().format(moment.HTML5_FMT.MONTH),
   hours: {} as WorkHourLog,
   prevMonth: (): void => {
@@ -27,6 +31,7 @@ const CalenderContext = React.createContext({
 const CalenderProvider: React.FC = ({ children }) => {
   const initial = React.useContext(CalenderContext);
   const [isLoading, setLoading] = React.useState(initial.isLoading);
+  const [showDuration, setShowDuration] = React.useState(initial.showDuration);
   const [month, setMonth] = React.useState(initial.month);
   const [hours, setHours] = React.useState<WorkHourLog>(initial.hours);
   const currentMonth = () => setMonth(moment(today).format(moment.HTML5_FMT.MONTH));
@@ -38,7 +43,18 @@ const CalenderProvider: React.FC = ({ children }) => {
 
   return (
     <CalenderContext.Provider
-      value={{ isLoading, setLoading, month, hours, currentMonth, prevMonth, nextMonth, addHours }}
+      value={{
+        isLoading,
+        setLoading,
+        showDuration,
+        setShowDuration,
+        month,
+        hours,
+        currentMonth,
+        prevMonth,
+        nextMonth,
+        addHours,
+      }}
     >
       {children}
     </CalenderContext.Provider>

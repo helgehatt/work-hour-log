@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import moment from 'moment';
 import EditEntry from 'src/components/EditEntry';
 import { useModal } from 'src/components/AppProviders/ModalProvider';
+import { useCalender } from 'src/components/AppProviders/CalenderProvider';
 
 const Root = styled.div<{ isDefault: boolean }>`
   padding: 0rem 0.25rem 0.1rem 0.25rem;
@@ -16,9 +17,11 @@ const Root = styled.div<{ isDefault: boolean }>`
 
 const CalenderEntry: React.FC<WorkHourEntry> = entry => {
   const { showModal } = useModal();
+  const { showDuration } = useCalender();
 
   const start = moment.utc(entry.start).format(moment.HTML5_FMT.TIME);
   const stop = moment.utc(entry.stop).format(moment.HTML5_FMT.TIME);
+  const duration = moment.utc(entry.stop).diff(moment.utc(entry.start), 'minutes') / 60;
 
   const handleClick = (event: React.SyntheticEvent) => {
     // Avoid propagation to CalenderCell
@@ -28,7 +31,7 @@ const CalenderEntry: React.FC<WorkHourEntry> = entry => {
 
   return (
     <Root isDefault={!entry.project} onClick={handleClick}>
-      {start}&nbsp;{stop}
+      {showDuration ? duration : `${start}\u00a0${stop}`}
     </Root>
   );
 };
