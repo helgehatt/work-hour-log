@@ -3,14 +3,28 @@ import Modal from 'src/components/atomic/Modal';
 import { useCalenderSum } from 'src/components/AppProviders/CalenderProvider';
 import styled from 'styled-components';
 
-const Root = styled(Modal)``;
+const Root = styled(Modal)`
+  > :first-child {
+    margin-top: 0;
+    font-weight: 500;
+  }
+  > :last-child {
+    margin-bottom: 0;
+  }
+`;
 
 const CalenderStats: React.FC = () => {
-  const { hours, breaks } = useCalenderSum();
+  const hours = useCalenderSum();
   return (
     <Root>
-      <div>Hours: {hours}</div>
-      <div>Hours w/o breaks: {hours - breaks * 0.5}</div>
+      <p>Hours per project</p>
+      {Object.entries(hours)
+        .sort()
+        .map(([key, value]) => (
+          <p key={key}>
+            {key}: {value}
+          </p>
+        ))}
     </Root>
   );
 };

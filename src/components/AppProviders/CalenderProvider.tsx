@@ -83,18 +83,12 @@ export const useCalenderSum = (month?: string) => {
     return acc;
   }, [] as Array<WorkHourEntry>);
 
-  const minutes = entries.reduce((acc, entry) => {
-    return acc + moment(entry.stop).diff(entry.start, 'minutes');
-  }, 0);
-
-  const breaks = entries.reduce((acc, entry) => {
-    return acc + Number(moment(entry.stop).diff(entry.start, 'minutes') >= 6 * 60);
-  }, 0);
-
-  return {
-    hours: minutes / 60,
-    breaks,
-  };
+  return entries.reduce((acc, entry) => {
+    const project = entry.project || 'Default';
+    const diff = moment(entry.stop).diff(entry.start, 'minutes') / 60;
+    acc[project] = (acc[project] || 0) + diff;
+    return acc;
+  }, {} as Record<string, number>);
 };
 
 export const useCalenderDate = (date: string) => {
