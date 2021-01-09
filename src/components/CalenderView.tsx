@@ -20,11 +20,18 @@ const Root = styled.div`
       opacity: 0.5;
     }
   }
+
+  > button {
+    margin: 0.5rem 1rem 0.5rem 0rem;
+    :first-of-type {
+      margin-left: 1rem;
+    }
+  }
 `;
 
 const CalenderView: React.FC = () => {
   const { showModal } = useModal();
-  const { isLoading } = useCalender();
+  const { isLoading, showDuration, setShowDuration } = useCalender();
   const { activeMonth, currentMonth, prevMonth, nextMonth } = useCalenderNav();
   return (
     <Root>
@@ -41,6 +48,10 @@ const CalenderView: React.FC = () => {
       <Button onClick={nextMonth}>Next</Button>
       <Button onClick={() => showModal(<CalenderStats />)}>Stats</Button>
       <Button onClick={() => showModal(<LoginForm />)}>Login</Button>
+      <label>
+        <input type='checkbox' checked={showDuration} onChange={event => setShowDuration(event.target.checked)} />
+        Show durations
+      </label>
     </Root>
   );
 };
