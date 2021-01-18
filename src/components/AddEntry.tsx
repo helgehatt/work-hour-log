@@ -1,60 +1,116 @@
 import React from 'react';
 import styled from 'styled-components';
-import TimeSelect from 'src/components/TimeSelect';
-import moment from 'moment';
-import Modal from 'src/components/atomic/Modal';
 import API from 'src/API';
+import { createFormScheme, withFormData } from 'minimal-form-data-hoc';
 import { useDispatch } from 'src/components/AppProviders/EventProvider';
 import { useCalenderProjects } from 'src/components/AppProviders/CalenderProvider';
+import Paper from '@material-ui/core/Paper';
+import Container from '@material-ui/core/Container';
+import Button from '@material-ui/core/Button';
+import Autocomplete from '@material-ui/lab/Autocomplete';
+import TextField from '@material-ui/core/TextField';
+import Typography from '@material-ui/core/Typography';
 
 interface IProps {
   date: string;
 }
 
-const Root = styled(Modal)``;
+const Root = styled(Container)`
+  margin-top: 5rem;
 
-const AddEntry: React.FC<IProps> = ({ date }) => {
+  > .MuiPaper-root {
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+
+    form > * {
+      margin-top: 1rem;
+      width: 100%;
+    }
+  }
+
+  .row {
+    display: flex;
+    > * {
+      flex-grow: 1;
+      :first-child {
+        margin-right: 0.5rem;
+      }
+    }
+  }
+`;
+
+const schemeFactory = (props: IProps) =>
+  createFormScheme({
+    start: { value: '09:00' },
+    stop: { value: '17:00' },
+    project: { value: '' },
+  });
+
+const AddEntry: React.FC<IProps> = withFormData(schemeFactory)(({ data, date }) => {
   const projects = useCalenderProjects();
-
-  const [start] = React.useState(moment.utc(date).hour(9).startOf('hour'));
-  const [stop] = React.useState(moment.utc(date).hour(16).startOf('hour'));
-  const [project, setProject] = React.useState<string>();
 
   const dispatch = useDispatch();
 
-  const handleAdd = () =>
+  const handleSubmit = (event: React.FormEvent) => {
+    event.preventDefault();
     dispatch(
       API.actions.hours.create({
-        start: start.toISOString(),
-        stop: stop.toISOString(),
-        project: project || undefined,
+        start: date + `T${data.start.value}:00Z`,
+        stop: date + `T${data.stop.value}:00Z`,
+        project: data.project.value || undefined,
       })
     );
+  };
 
   return (
-    <Root>
-      <div>
-        Start:&nbsp;
-        <TimeSelect timestamp={start} />
-      </div>
-      <div>
-        Stop:&nbsp;
-        <TimeSelect timestamp={stop} />
-      </div>
-      <div>
-        Project:&nbsp;
-        <input type='text' list='projects' onChange={({ target: { value } }) => setProject(value)} />
-        <datalist id='projects'>
-          {projects.map(project => (
-            <option key={project} value={project} />
-          ))}
-        </datalist>
-      </div>
-      <div>
-        <button onClick={handleAdd}>Add</button>
-      </div>
+    <Root maxWidth='xs' disableGutters>
+      <Paper>
+        <Typography variant='h6'>Work Hour Entry</Typography>
+        <form noValidate onSubmit={handleSubmit}>
+          <div className='row'>
+            <TextField
+              id='entry-start'
+              label='Start'
+              type='time'
+              variant='outlined'
+              InputLabelProps={{
+                shrink: true,
+              }}
+              inputProps={{
+                step: 30 * 60,
+              }}
+              value={data.start.value}
+              onChange={data.start.onChange}
+            />
+            <TextField
+              id='entry-stop'
+              label='Stop'
+              type='time'
+              variant='outlined'
+              InputLabelProps={{
+                shrink: true,
+              }}
+              inputProps={{
+                step: 30 * 60,
+              }}
+              value={data.stop.value}
+              onChange={data.stop.onChange}
+            />
+          </div>
+          <Autocomplete
+            id='entry-project'
+            options={projects}
+            renderInput={params => <TextField {...params} label='Project' variant='outlined' />}
+          />
+          <Button type='submit' fullWidth variant='contained' color='primary'>
+            Add
+          </Button>
+        </form>
+      </Paper>
     </Root>
   );
-};
+});
 
 export default AddEntry;

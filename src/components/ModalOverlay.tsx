@@ -12,6 +12,7 @@ const Root = styled.div`
   left: 0;
   right: 0;
   overflow-y: auto;
+  z-index: 1200;
 `;
 
 const ModalOverlay: React.FC<IProps> = ({ children }) => {

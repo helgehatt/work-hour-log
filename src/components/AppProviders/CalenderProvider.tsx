@@ -5,25 +5,19 @@ const today = moment().format(moment.HTML5_FMT.DATE);
 
 const CalenderContext = React.createContext({
   isLoading: false,
-  setLoading: (state: boolean): void => {
+  setLoading: (state: React.SetStateAction<boolean>): void => {
     throw new Error('Invalid context');
   },
   showDuration: false,
-  setShowDuration: (state: boolean): void => {
+  setShowDuration: (state: React.SetStateAction<boolean>): void => {
     throw new Error('Invalid context');
   },
   month: moment().format(moment.HTML5_FMT.MONTH),
+  setMonth: (state: React.SetStateAction<string>): void => {
+    throw new Error('Invalid context');
+  },
   hours: {} as WorkHourLog,
-  prevMonth: (): void => {
-    throw new Error('Invalid context');
-  },
-  nextMonth: (): void => {
-    throw new Error('Invalid context');
-  },
-  currentMonth: (): void => {
-    throw new Error('Invalid context');
-  },
-  addHours: (month: string, hours: WorkHourMonth): void => {
+  setHours: (state: React.SetStateAction<WorkHourLog>): void => {
     throw new Error('Invalid context');
   },
 });
@@ -33,13 +27,7 @@ const CalenderProvider: React.FC = ({ children }) => {
   const [isLoading, setLoading] = React.useState(initial.isLoading);
   const [showDuration, setShowDuration] = React.useState(initial.showDuration);
   const [month, setMonth] = React.useState(initial.month);
-  const [hours, setHours] = React.useState<WorkHourLog>(initial.hours);
-  const currentMonth = () => setMonth(moment(today).format(moment.HTML5_FMT.MONTH));
-  const prevMonth = () => setMonth(moment(month).subtract(1, 'month').format(moment.HTML5_FMT.MONTH));
-  const nextMonth = () => setMonth(moment(month).add(1, 'month').format(moment.HTML5_FMT.MONTH));
-  const addHours = React.useCallback((month: string, hours: WorkHourMonth) => {
-    setHours(prev => ({ ...prev, [month]: hours }));
-  }, []);
+  const [hours, setHours] = React.useState(initial.hours);
 
   return (
     <CalenderContext.Provider
@@ -49,11 +37,9 @@ const CalenderProvider: React.FC = ({ children }) => {
         showDuration,
         setShowDuration,
         month,
+        setMonth,
         hours,
-        currentMonth,
-        prevMonth,
-        nextMonth,
-        addHours,
+        setHours,
       }}
     >
       {children}
@@ -62,34 +48,6 @@ const CalenderProvider: React.FC = ({ children }) => {
 };
 
 export const useCalender = () => React.useContext(CalenderContext);
-
-export const useCalenderNav = () => {
-  const context = React.useContext(CalenderContext);
-  return {
-    activeMonth: context.month,
-    currentMonth: context.currentMonth,
-    prevMonth: context.prevMonth,
-    nextMonth: context.nextMonth,
-  };
-};
-
-export const useCalenderSum = (month?: string) => {
-  const context = React.useContext(CalenderContext);
-
-  const hours = context.hours[month || context.month];
-
-  const entries = Object.values(hours || {}).reduce((acc, day) => {
-    acc.push(...Object.values(day));
-    return acc;
-  }, [] as Array<WorkHourEntry>);
-
-  return entries.reduce((acc, entry) => {
-    const project = entry.project || 'Default';
-    const diff = moment(entry.stop).diff(entry.start, 'minutes') / 60;
-    acc[project] = (acc[project] || 0) + diff;
-    return acc;
-  }, {} as Record<string, number>);
-};
 
 export const useCalenderDate = (date: string) => {
   const context = React.useContext(CalenderContext);

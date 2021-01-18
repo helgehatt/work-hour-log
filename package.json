@@ -3,11 +3,17 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@material-ui/core": "^4.11.2",
+    "@material-ui/icons": "^4.11.2",
+    "@material-ui/lab": "^4.0.0-alpha.57",
+    "apexcharts": "^3.23.1",
     "faunadb": "^4.0.0",
-    "minimal-form-data-hoc": "^1.0.1",
+    "minimal-form-data-hoc": "2.0.2",
     "moment": "^2.29.1",
     "react": "^17.0.1",
+    "react-apexcharts": "^1.3.7",
     "react-dom": "^17.0.1",
+    "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.1",
     "styled-components": "^5.2.1",
     "typescript": "~4.1.2"
@@ -41,6 +47,7 @@
     "@types/node": "^14.14.11",
     "@types/react": "^17.0.0",
     "@types/react-dom": "^17.0.0",
+    "@types/react-router-dom": "^5.1.7",
     "@types/styled-components": "^5.1.4",
     "prettier": "^2.2.1"
   }
