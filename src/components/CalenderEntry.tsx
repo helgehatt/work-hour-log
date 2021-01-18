@@ -4,24 +4,20 @@ import moment from 'moment';
 import EditEntry from 'src/components/EditEntry';
 import { useModal } from 'src/components/AppProviders/ModalProvider';
 import { useCalender } from 'src/components/AppProviders/CalenderProvider';
+import Button from '@material-ui/core/Button';
+import Typography from '@material-ui/core/Typography';
 
-const Root = styled.div<{ isDefault: boolean }>`
-  padding: 0rem 0.25rem 0.1rem 0.25rem;
-  color: white;
-  background-color: ${({ isDefault }) => (isDefault ? '#899cd9' : '#90d989')};
+interface IProps extends WorkHourEntry {
+  disabled?: boolean;
+}
 
-  &:hover {
-    cursor: pointer;
-  }
+const Root = styled(Button)`
+  margin-top: 2px;
 `;
 
-const CalenderEntry: React.FC<WorkHourEntry> = entry => {
+const CalenderEntry: React.FC<IProps> = ({ disabled, ...entry }) => {
   const { showModal } = useModal();
   const { showDuration } = useCalender();
-
-  const start = moment.utc(entry.start).format(moment.HTML5_FMT.TIME);
-  const stop = moment.utc(entry.stop).format(moment.HTML5_FMT.TIME);
-  const duration = moment.utc(entry.stop).diff(moment.utc(entry.start), 'minutes') / 60;
 
   const handleClick = (event: React.SyntheticEvent) => {
     // Avoid propagation to CalenderCell
@@ -30,10 +26,27 @@ const CalenderEntry: React.FC<WorkHourEntry> = entry => {
   };
 
   return (
-    <Root isDefault={!entry.project} onClick={handleClick}>
-      {showDuration ? duration : `${start}\u00a0${stop}`}
+    <Root
+      onClick={handleClick}
+      color={!entry.project ? 'primary' : 'secondary'}
+      variant='contained'
+      size='small'
+      fullWidth
+      disabled={disabled}
+    >
+      <Typography variant='body2'>
+        {showDuration
+          ? getDuration(entry.start, entry.stop)
+          : `${getTime(entry.start)}\u00A0-\u00A0${getTime(entry.stop)}`}
+      </Typography>
     </Root>
   );
 };
+
+const getTime = (timestamp: string) =>
+  moment.utc(timestamp).format(moment.HTML5_FMT.TIME).replace(/:00$/, '').replace(/:30$/, '\u00BD').replace(/^0/, '');
+
+const getDuration = (start: string, stop: string) =>
+  String(moment.utc(stop).diff(moment.utc(start), 'minutes') / 60).replace(/.5$/, '\u00BD');
 
 export default CalenderEntry;

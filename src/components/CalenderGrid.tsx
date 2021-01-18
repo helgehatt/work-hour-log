@@ -2,19 +2,19 @@ import React from 'react';
 import styled from 'styled-components';
 import moment from 'moment';
 import CalenderCell from 'src/components/CalenderCell';
-import constants from 'src/components/util/constants';
+import { useCalender } from 'src/components/AppProviders/CalenderProvider';
+import Typography from '@material-ui/core/Typography';
 
-interface IProps {
-  month: string;
-}
+interface IProps {}
 
 const Root = styled.div`
   display: grid;
   grid-template-columns: repeat(7, 1fr);
 
-  > div {
-    border-right: ${constants.BORDER};
-    border-bottom: ${constants.BORDER};
+  > * {
+    border-right: #dadce0 1px solid;
+    border-bottom: #dadce0 1px solid;
+    border-radius: 0;
 
     :nth-child(-n + 7) {
       text-align: center;
@@ -37,12 +37,15 @@ const getCalenderSpan = (month: string) => {
 
 const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 
-const CalenderGrid: React.FC<IProps> = ({ month }) => {
+const CalenderGrid: React.FC<IProps> = () => {
+  const { month } = useCalender();
   const dates = getCalenderSpan(month);
   return (
     <Root>
       {days.map(day => (
-        <div key={day}>{day}</div>
+        <Typography key={day} variant='subtitle1'>
+          {day}
+        </Typography>
       ))}
       {dates.map(date => (
         <CalenderCell key={date} date={date} />

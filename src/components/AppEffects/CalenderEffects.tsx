@@ -5,7 +5,7 @@ import { useDispatch } from 'src/components/AppProviders/EventProvider';
 
 const CalenderEffects: React.FC = ({ children }) => {
   const dispatch = useDispatch();
-  const { setLoading, hours, month, addHours } = useCalender();
+  const { setLoading, month, hours, setHours } = useCalender();
 
   // Toggle loading when reading or authenticating
   React.useEffect(() => {
@@ -54,11 +54,11 @@ const CalenderEffects: React.FC = ({ children }) => {
     const fn = API.subscriptions.add(event => {
       switch (event.type) {
         case API.constants.hours.HOURS_READ_SUCCESS:
-          addHours(event.request.month, event.response);
+          setHours(prev => ({ ...prev, [event.request.month]: event.response }));
       }
     });
     return () => API.subscriptions.remove(fn);
-  }, [addHours]);
+  }, [setHours]);
 
   // Dispatch read action if hours missing and authenticated
   React.useEffect(() => {

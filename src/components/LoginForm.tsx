@@ -2,22 +2,45 @@ import React from 'react';
 import styled from 'styled-components';
 import { withFormData, createFormScheme } from 'minimal-form-data-hoc';
 import { useDispatch } from 'src/components/AppProviders/EventProvider';
-import Modal from 'src/components/atomic/Modal';
 import API from 'src/API';
+import Paper from '@material-ui/core/Paper';
+import Container from '@material-ui/core/Container';
+import Avatar from '@material-ui/core/Avatar';
+import Button from '@material-ui/core/Button';
+import TextField from '@material-ui/core/TextField';
+import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
+import Typography from '@material-ui/core/Typography';
 
-const Root = styled(Modal)`
-  form > div {
+interface IProps {}
+
+const Root = styled(Container)`
+  margin-top: 5rem;
+
+  > .MuiPaper-root {
+    padding: 1rem;
     display: flex;
-    justify-content: space-between;
+    flex-direction: column;
+    align-items: center;
+
+    .MuiAvatar-root {
+      margin: 0.5rem;
+      background-color: #f50057; // TODO:
+    }
+
+    form > * {
+      margin-top: 1rem;
+      width: 100%;
+    }
   }
 `;
 
-const scheme = createFormScheme({
-  username: { value: '' },
-  password: { value: '' },
-});
+const schemeFactory = (props: IProps) =>
+  createFormScheme({
+    username: { value: '' },
+    password: { value: '' },
+  });
 
-const LoginForm: React.FC = withFormData(scheme)(({ data }) => {
+const LoginForm: React.FC<IProps> = withFormData(schemeFactory)(({ data }) => {
   const dispatch = useDispatch();
 
   const [error, setError] = React.useState('');
@@ -42,23 +65,41 @@ const LoginForm: React.FC = withFormData(scheme)(({ data }) => {
   }, []);
 
   return (
-    <Root>
-      Login
-      <form onSubmit={handleSubmit}>
-        <div>
-          Username:&nbsp;
-          <input type='text' value={data.username.value} onChange={data.username.onChange} />
-        </div>
-        <div>
-          Password:&nbsp;
-          <input type='password' value={data.password.value} onChange={data.password.onChange} />
-        </div>
-        <div>
-          <span />
-          <button type='submit'>Submit</button>
-        </div>
-      </form>
-      {error}
+    <Root maxWidth='xs' disableGutters>
+      <Paper>
+        <Avatar>
+          <LockOutlinedIcon />
+        </Avatar>
+        <Typography variant='h5'>Sign in</Typography>
+        <form noValidate onSubmit={handleSubmit}>
+          <TextField
+            variant='outlined'
+            id='username'
+            label='Username'
+            name='username'
+            autoComplete='username'
+            autoFocus
+            value={data.username.value}
+            onChange={data.username.onChange}
+            error={!!error}
+          />
+          <TextField
+            variant='outlined'
+            name='password'
+            label='Password'
+            type='password'
+            id='password'
+            autoComplete='current-password'
+            value={data.password.value}
+            onChange={data.password.onChange}
+            error={!!error}
+            helperText={error}
+          />
+          <Button type='submit' variant='contained' color='primary'>
+            Sign In
+          </Button>
+        </form>
+      </Paper>
     </Root>
   );
 });
