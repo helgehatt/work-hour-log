@@ -5,7 +5,6 @@ import CalenderEntry from 'src/components/CalenderEntry';
 import { useModal } from 'src/components/AppProviders/ModalProvider';
 import AddEntry from 'src/components/AddEntry';
 import Chip from '@material-ui/core/Chip';
-import Typography from '@material-ui/core/Typography';
 
 interface IProps {
   date: string;
@@ -22,6 +21,9 @@ const Root = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
+  }
+  .MuiChip-colorNone {
+    background-color: unset;
   }
 `;
 
@@ -41,11 +43,11 @@ const CalenderCell: React.FC<IProps> = ({ date }) => {
 
   return (
     <Root onClick={handleClick} className={classes.join(' ')}>
-      {isToday ? (
-        <Chip label={Number(date.substr(8))} color='secondary' size='small' style={{ marginBottom: '-2px' }} />
-      ) : (
-        <Typography variant='subtitle2'>{Number(date.substr(8))}</Typography>
-      )}
+      <Chip
+        label={Number(date.substr(8))}
+        size='small'
+        className={isToday ? 'MuiChip-colorSecondary' : 'MuiChip-colorNone'}
+      />
       {hours?.map(entry => (
         <CalenderEntry key={entry.id} {...entry} disabled={!isActive} />
       ))}
