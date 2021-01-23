@@ -102,6 +102,12 @@ const AddEntry: React.FC<IProps> = withFormData(schemeFactory)(({ data, date }) 
           <Autocomplete
             id='entry-project'
             options={projects}
+            freeSolo
+            value={data.project.value}
+            inputValue={data.project.value}
+            onInputChange={(event, value) => {
+              data.project.onChange({ target: { value } });
+            }}
             renderInput={params => <TextField {...params} label='Project' variant='outlined' />}
           />
           <Button type='submit' fullWidth variant='contained' color='primary'>
