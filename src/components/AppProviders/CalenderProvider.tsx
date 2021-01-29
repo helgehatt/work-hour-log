@@ -1,8 +1,6 @@
 import React from 'react';
 import moment from 'moment';
 
-const today = moment().format(moment.HTML5_FMT.DATE);
-
 const CalenderContext = React.createContext({
   isLoading: false,
   setLoading: (state: React.SetStateAction<boolean>): void => {
@@ -48,31 +46,5 @@ const CalenderProvider: React.FC = ({ children }) => {
 };
 
 export const useCalender = () => React.useContext(CalenderContext);
-
-export const useCalenderDate = (date: string) => {
-  const context = React.useContext(CalenderContext);
-  const month = date.substr(0, 7);
-  return {
-    isToday: date === today,
-    isActive: month === context.month,
-    hours: Object.values(context.hours[month]?.[date] || {}),
-  };
-};
-
-export const useCalenderProjects = () => {
-  const context = React.useContext(CalenderContext);
-
-  const projects = new Set<string>();
-
-  Object.values(context.hours || {}).forEach(month => {
-    Object.values(month).forEach(day => {
-      Object.values(day).forEach(entry => {
-        if (entry.project) projects.add(entry.project);
-      });
-    });
-  });
-
-  return Array.from(projects);
-};
 
 export default CalenderProvider;
