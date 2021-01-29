@@ -2,7 +2,6 @@ import React from 'react';
 import styled from 'styled-components';
 import API from 'src/API';
 import { useDispatch } from 'src/components/AppProviders/EventProvider';
-import { useCalenderProjects } from 'src/components/AppProviders/CalenderProvider';
 import { createFormScheme, withFormData } from 'minimal-form-data-hoc';
 import Paper from '@material-ui/core/Paper';
 import Container from '@material-ui/core/Container';
@@ -10,6 +9,7 @@ import Button from '@material-ui/core/Button';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
+import CalendarHooks from 'src/components/AppHooks/CalendarHooks';
 
 interface IProps {
   entry: WorkHourEntry;
@@ -49,7 +49,7 @@ const schemeFactory = (props: IProps) =>
   });
 
 const EditEntry: React.FC<IProps> = withFormData(schemeFactory)(({ data, entry }) => {
-  const projects = useCalenderProjects();
+  const projects = CalendarHooks.useProjects();
 
   const dispatch = useDispatch();
 

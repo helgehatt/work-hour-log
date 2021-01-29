@@ -8,10 +8,12 @@ import Hidden from '@material-ui/core/Hidden';
 import CalenderStats from 'src/components/CalenderStats';
 
 const Root = styled.div`
-  display: flex;
-
   > *:last-child {
-    flex-grow: 1;
+    width: 100%;
+
+    @media (min-width: 600px) {
+      padding-left: 240px;
+    }
   }
 `;
 

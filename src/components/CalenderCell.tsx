@@ -1,10 +1,10 @@
 import React from 'react';
 import styled from 'styled-components';
-import { useCalenderDate } from 'src/components/AppProviders/CalenderProvider';
 import CalenderEntry from 'src/components/CalenderEntry';
 import { useModal } from 'src/components/AppProviders/ModalProvider';
 import AddEntry from 'src/components/AddEntry';
 import Chip from '@material-ui/core/Chip';
+import CalendarHooks from 'src/components/AppHooks/CalendarHooks';
 
 interface IProps {
   date: string;
@@ -29,7 +29,7 @@ const Root = styled.div`
 
 const CalenderCell: React.FC<IProps> = ({ date }) => {
   const { showModal } = useModal();
-  const { isToday, isActive, hours } = useCalenderDate(date);
+  const { isToday, isActive, hours } = CalendarHooks.useDate(date);
 
   const handleClick = () => {
     showModal(<AddEntry date={date} />);
