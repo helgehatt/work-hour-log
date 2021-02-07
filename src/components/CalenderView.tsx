@@ -10,9 +10,11 @@ import CalenderStats from 'src/components/CalenderStats';
 const Root = styled.div`
   > *:last-child {
     width: 100%;
+    min-width: 448px; // 7*64px (min-width of cells)
 
     @media (min-width: 600px) {
       padding-left: 240px;
+      min-width: 688px; // 7*64px + 240px (min-width of cells + padding)
     }
   }
 `;
