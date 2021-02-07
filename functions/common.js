@@ -1,9 +1,3 @@
-const faunadb = require('faunadb');
-
-exports.client = new faunadb.Client({
-  secret: process.env.FAUNADB_SERVER_SECRET,
-});
-
 // Wrap headers in function for immutability
 const getHeaders = () => ({
   'Content-Type': 'application/json',
@@ -28,5 +22,3 @@ exports.failure = (error, statusCode = 400) => {
   );
   return { statusCode, body, headers: getHeaders() };
 };
-
-exports.unpack = ({ ref, data }) => ({ id: ref.id, ...data });

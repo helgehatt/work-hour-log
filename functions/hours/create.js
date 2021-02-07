@@ -1,6 +1,5 @@
-const faunadb = require('faunadb');
-const q = faunadb.query;
-const { client, success, failure, unpack } = require('../common');
+const database = require('../database');
+const { success, failure } = require('../common');
 
 exports.main = async ({ userId, start, stop, project }) => {
   if (!start || !stop) {
@@ -16,9 +15,7 @@ exports.main = async ({ userId, start, stop, project }) => {
   }
 
   try {
-    const response = await client
-      .query(q.Create(q.Collection('hours'), { data: { start, stop, project, userId } }))
-      .then(unpack);
+    const response = await database.Collection('hours').Create({ start, stop, project, userId });
 
     return success(response);
   } catch (error) {
