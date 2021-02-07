@@ -1,11 +1,9 @@
-const faunadb = require('faunadb');
-const q = faunadb.query;
 const crypto = require('crypto');
-const { client, unpack } = require('../common');
+const database = require('../database');
 
 exports.verify = async ({ username, password }) => {
   try {
-    const entry = await client.query(q.Get(q.Match(q.Index('user-by-username'), username))).then(unpack);
+    const entry = await database.Index('user-by-username').Get(username);
 
     const hash = crypto.pbkdf2Sync(password, entry.salt, 10000, 64, 'sha512');
 

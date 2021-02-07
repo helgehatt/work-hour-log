@@ -1,24 +1,18 @@
-const faunadb = require('faunadb');
-const q = faunadb.query;
 const crypto = require('crypto');
-const { client, unpack } = require('../common');
+const database = require('../database');
 const { urlEncode } = require('./util');
 
 exports.generateCookie = async ({ userId, headers }) => {
   const token = urlEncode(crypto.randomBytes(32).toString('base64'));
 
   try {
-    await client.query(
-      q.Create(q.Collection('sessions'), {
-        data: {
-          userId,
-          token,
-          host: headers['host'],
-          'user-agent': headers['user-agent'],
-          'client-ip': headers['client-ip'],
-        },
-      })
-    );
+    await database.Collection('sessions').Create({
+      userId,
+      token,
+      host: headers['host'],
+      'user-agent': headers['user-agent'],
+      'client-ip': headers['client-ip'],
+    });
 
     return `session=${token}; Max-Age=${30 * 24 * 3600}; HttpOnly; SameSite=Strict`;
   } catch (error) {
@@ -27,7 +21,7 @@ exports.generateCookie = async ({ userId, headers }) => {
 };
 
 exports.validate = async ({ userId, token, headers }) => {
-  const entry = await client.query(q.Get(q.Match(q.Index('session-by-token'), [userId, token]))).then(unpack);
+  const entry = await database.Index('session-by-token').Get([userId, token]);
 
   if (headers['host'] !== entry['host']) {
     throw new Error('Unable to refresh token');
@@ -46,7 +40,7 @@ exports.validate = async ({ userId, token, headers }) => {
 
 exports.invalidate = async ({ sessionId }) => {
   try {
-    await client.query(q.Delete(q.Ref(q.Collection('sessions'), sessionId)));
+    await database.Collection('sessions').Delete(sessionId);
   } catch (error) {
     // Ignore error
   }

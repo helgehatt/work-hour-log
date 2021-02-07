@@ -1,6 +1,5 @@
-const faunadb = require('faunadb');
-const q = faunadb.query;
-const { client, success, failure, unpack } = require('../common');
+const database = require('../database');
+const { success, failure } = require('../common');
 
 exports.main = async ({ userId, id, start, stop, project }) => {
   if (!id || !start || !stop) {
@@ -16,15 +15,13 @@ exports.main = async ({ userId, id, start, stop, project }) => {
   }
 
   try {
-    const entry = await client.query(q.Get(q.Ref(q.Collection('hours'), id))).then(unpack);
+    const entry = await database.Collection('hours').Get(id);
 
     if (entry.userId !== userId) {
       return failure('Invalid parameters');
     }
 
-    const response = await client
-      .query(q.Update(q.Ref(q.Collection('hours'), id), { data: { start, stop, project, userId } }))
-      .then(unpack);
+    const response = await database.Collection('hours').Update(id, { start, stop, project, userId });
 
     return success(response);
   } catch (error) {
