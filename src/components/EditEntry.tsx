@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import API from 'src/API';
 import { useDispatch } from 'src/components/AppProviders/EventProvider';
-import { createFormScheme, withFormData } from 'minimal-form-data-hoc';
+import miniform from 'minimal-form-data-hoc';
 import Paper from '@material-ui/core/Paper';
 import Container from '@material-ui/core/Container';
 import Button from '@material-ui/core/Button';
@@ -41,32 +41,31 @@ const Root = styled(Container)`
   }
 `;
 
-const schemeFactory = (props: IProps) =>
-  createFormScheme({
-    start: { value: props.entry.start.substr(11, 5) },
-    stop: { value: props.entry.stop.substr(11, 5) },
-    project: { value: props.entry.project || '' },
-  });
+const schemeFactory = miniform.createFormScheme((props: IProps) => ({
+  start: { value: props.entry.start.substr(11, 5) },
+  stop: { value: props.entry.stop.substr(11, 5) },
+  project: { value: props.entry.project || '' },
+}));
 
-const EditEntry: React.FC<IProps> = withFormData(schemeFactory)(({ data, entry }) => {
+const EditEntry: React.FC<IProps> = miniform.withFormData(schemeFactory)(props => {
   const projects = CalendarHooks.useProjects();
 
   const dispatch = useDispatch();
 
   const handleSubmit = (event: React.FormEvent) => {
     event.preventDefault();
-    const date = entry.start.substr(0, 10);
+    const date = props.entry.start.substr(0, 10);
     dispatch(
       API.actions.hours.update({
-        id: entry.id,
-        start: `${date}T${data.start.value}:00Z`,
-        stop: `${date}T${data.stop.value}:00Z`,
-        project: data.project.value || undefined,
+        id: props.entry.id,
+        start: `${date}T${props.start.value}:00Z`,
+        stop: `${date}T${props.stop.value}:00Z`,
+        project: props.project.value || undefined,
       })
     );
   };
 
-  const handleDelete = () => dispatch(API.actions.hours.delete({ id: entry.id }));
+  const handleDelete = () => dispatch(API.actions.hours.delete({ id: props.entry.id }));
 
   return (
     <Root maxWidth='xs' disableGutters>
@@ -85,8 +84,8 @@ const EditEntry: React.FC<IProps> = withFormData(schemeFactory)(({ data, entry }
               inputProps={{
                 step: 30 * 60,
               }}
-              value={data.start.value}
-              onChange={data.start.onChange}
+              value={props.start.value}
+              onChange={props.start.onChange}
             />
             <TextField
               id='entry-stop'
@@ -99,18 +98,18 @@ const EditEntry: React.FC<IProps> = withFormData(schemeFactory)(({ data, entry }
               inputProps={{
                 step: 30 * 60,
               }}
-              value={data.stop.value}
-              onChange={data.stop.onChange}
+              value={props.stop.value}
+              onChange={props.stop.onChange}
             />
           </div>
           <Autocomplete
             id='entry-project'
             options={projects}
             freeSolo
-            value={data.project.value}
-            inputValue={data.project.value}
+            value={props.project.value}
+            inputValue={props.project.value}
             onInputChange={(event, value) => {
-              data.project.onChange({ target: { value } });
+              props.project.onChange({ target: { value } });
             }}
             renderInput={params => (
               <TextField
@@ -118,7 +117,7 @@ const EditEntry: React.FC<IProps> = withFormData(schemeFactory)(({ data, entry }
                 label='Project'
                 variant='outlined'
                 InputLabelProps={{
-                  shrink: !!data.project.value,
+                  shrink: !!props.project.value,
                 }}
               />
             )}

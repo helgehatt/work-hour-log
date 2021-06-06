@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import API from 'src/API';
-import { createFormScheme, withFormData } from 'minimal-form-data-hoc';
+import miniform from 'minimal-form-data-hoc';
 import { useDispatch } from 'src/components/AppProviders/EventProvider';
 import Paper from '@material-ui/core/Paper';
 import Container from '@material-ui/core/Container';
@@ -41,14 +41,13 @@ const Root = styled(Container)`
   }
 `;
 
-const schemeFactory = (props: IProps) =>
-  createFormScheme({
-    start: { value: '09:00' },
-    stop: { value: '17:00' },
-    project: { value: '' },
-  });
+const schemeFactory = miniform.createFormScheme((props: IProps) => ({
+  start: { value: '09:00' },
+  stop: { value: '17:00' },
+  project: { value: '' },
+}));
 
-const AddEntry: React.FC<IProps> = withFormData(schemeFactory)(({ data, date }) => {
+const AddEntry: React.FC<IProps> = miniform.withFormData(schemeFactory)(props => {
   const projects = CalendarHooks.useProjects();
 
   const dispatch = useDispatch();
@@ -57,9 +56,9 @@ const AddEntry: React.FC<IProps> = withFormData(schemeFactory)(({ data, date }) 
     event.preventDefault();
     dispatch(
       API.actions.hours.create({
-        start: date + `T${data.start.value}:00Z`,
-        stop: date + `T${data.stop.value}:00Z`,
-        project: data.project.value || undefined,
+        start: props.date + `T${props.start.value}:00Z`,
+        stop: props.date + `T${props.stop.value}:00Z`,
+        project: props.project.value || undefined,
       })
     );
   };
@@ -81,8 +80,8 @@ const AddEntry: React.FC<IProps> = withFormData(schemeFactory)(({ data, date }) 
               inputProps={{
                 step: 30 * 60,
               }}
-              value={data.start.value}
-              onChange={data.start.onChange}
+              value={props.start.value}
+              onChange={props.start.onChange}
             />
             <TextField
               id='entry-stop'
@@ -95,18 +94,18 @@ const AddEntry: React.FC<IProps> = withFormData(schemeFactory)(({ data, date }) 
               inputProps={{
                 step: 30 * 60,
               }}
-              value={data.stop.value}
-              onChange={data.stop.onChange}
+              value={props.stop.value}
+              onChange={props.stop.onChange}
             />
           </div>
           <Autocomplete
             id='entry-project'
             options={projects}
             freeSolo
-            value={data.project.value}
-            inputValue={data.project.value}
+            value={props.project.value}
+            inputValue={props.project.value}
             onInputChange={(event, value) => {
-              data.project.onChange({ target: { value } });
+              props.project.onChange({ target: { value } });
             }}
             renderInput={params => <TextField {...params} label='Project' variant='outlined' />}
           />

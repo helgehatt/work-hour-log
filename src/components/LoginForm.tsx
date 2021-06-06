@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { withFormData, createFormScheme } from 'minimal-form-data-hoc';
+import miniform from 'minimal-form-data-hoc';
 import { useDispatch } from 'src/components/AppProviders/EventProvider';
 import API from 'src/API';
 import Paper from '@material-ui/core/Paper';
@@ -34,13 +34,12 @@ const Root = styled(Container)`
   }
 `;
 
-const schemeFactory = (props: IProps) =>
-  createFormScheme({
-    username: { value: '' },
-    password: { value: '' },
-  });
+const scheme = miniform.createFormScheme((props: IProps) => ({
+  username: { value: '' },
+  password: { value: '' },
+}));
 
-const LoginForm: React.FC<IProps> = withFormData(schemeFactory)(({ data }) => {
+const LoginForm: React.FC<IProps> = miniform.withFormData(scheme)(props => {
   const dispatch = useDispatch();
 
   const [error, setError] = React.useState('');
@@ -49,8 +48,8 @@ const LoginForm: React.FC<IProps> = withFormData(schemeFactory)(({ data }) => {
     event.preventDefault();
     dispatch(
       API.actions.auth.login({
-        username: data.username.value,
-        password: data.password.value,
+        username: props.username.value,
+        password: props.password.value,
       })
     );
   };
@@ -79,8 +78,8 @@ const LoginForm: React.FC<IProps> = withFormData(schemeFactory)(({ data }) => {
             name='username'
             autoComplete='username'
             autoFocus
-            value={data.username.value}
-            onChange={data.username.onChange}
+            value={props.username.value}
+            onChange={props.username.onChange}
             error={!!error}
           />
           <TextField
@@ -90,8 +89,8 @@ const LoginForm: React.FC<IProps> = withFormData(schemeFactory)(({ data }) => {
             type='password'
             id='password'
             autoComplete='current-password'
-            value={data.password.value}
-            onChange={data.password.onChange}
+            value={props.password.value}
+            onChange={props.password.onChange}
             error={!!error}
             helperText={error}
           />
