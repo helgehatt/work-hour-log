@@ -11,7 +11,7 @@ exports.urlEncode = input => {
 };
 
 exports.urlDecode = input => {
-  const encoded = String(input).replace(/-/g, '+').replace(/_/g, '/');
+  let encoded = String(input).replace(/-/g, '+').replace(/_/g, '/');
   while (encoded.length % 4) encoded += '=';
   return encoded;
 };

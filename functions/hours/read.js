@@ -16,6 +16,7 @@ exports.main = async ({ userId, month }) => {
 
 const transform = response =>
   response.reduce((acc, entry) => {
+    delete entry.userId;
     const key = entry.start.substr(0, 10);
     acc[key] = Object.assign(acc[key] || {}, { [entry.id]: entry });
     return acc;

@@ -1,3 +1,4 @@
+import { Handler } from '@netlify/functions';
 const { success, failure } = require('./common');
 const jwt = require('./auth/jwt');
 const API = {
@@ -7,23 +8,22 @@ const API = {
   DELETE: require('./hours/delete').main,
 };
 
-exports.handler = async (event, context, callback) => {
+export const handler: Handler = async (event, context) => {
   if (event.httpMethod === 'OPTIONS') {
-    return callback(null, success());
+    return success();
   }
 
   try {
     const payload = jwt.verify(event.headers);
 
-    return callback(
-      null,
-      await API[event.httpMethod]({
-        ...JSON.parse(event.body || '{}'),
-        ...event.queryStringParameters,
-        userId: payload.sub,
-      })
-    );
+    const response = await API[event.httpMethod]({
+      ...JSON.parse(event.body || '{}'),
+      ...event.queryStringParameters,
+      userId: payload.sub,
+    });
+
+    return response;
   } catch (error) {
-    return callback(null, failure(error, 401));
+    return failure(error, 401);
   }
 };
