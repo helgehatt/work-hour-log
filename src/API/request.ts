@@ -1,10 +1,5 @@
 import token from 'src/API/token';
 
-const baseURL =
-  process.env.NODE_ENV === 'development'
-    ? 'http://localhost:8888/.netlify/functions/'
-    : process.env.REACT_APP_URL + '.netlify/functions/';
-
 const handleOptions = ({ headers, ...options }: RequestInit): RequestInit => ({
   headers: {
     Authorization: 'Bearer ' + token.get(),
@@ -22,6 +17,6 @@ const handleResponse = async <T>(response: Response) => {
 };
 
 const request = <T = any>(url: string, options: RequestInit) =>
-  fetch(baseURL + url, handleOptions(options)).then(response => handleResponse<T>(response));
+  fetch(`/.netlify/functions/${url}`, handleOptions(options)).then(response => handleResponse<T>(response));
 
 export default request;
