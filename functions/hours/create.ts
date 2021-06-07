@@ -1,8 +1,17 @@
+import { HandlerResponse } from '@netlify/functions';
+
 const database = require('../database');
 const { success, failure } = require('../common');
 
-exports.main = async ({ userId, id, start, stop, project }) => {
-  if (!id || !start || !stop) {
+type Main = (args: {
+  userId: string;
+  start: string;
+  stop: string;
+  project: string;
+}) => Promise<HandlerResponse>;
+
+export const main: Main = async ({ userId, start, stop, project }) => {
+  if (!start || !stop) {
     return failure('Missing parameters');
   }
 
@@ -15,13 +24,7 @@ exports.main = async ({ userId, id, start, stop, project }) => {
   }
 
   try {
-    const entry = await database.Collection('hours').Get(id);
-
-    if (entry.userId !== userId) {
-      return failure('Invalid parameters');
-    }
-
-    const response = await database.Collection('hours').Update(id, { start, stop, project, userId });
+    const response = await database.Collection('hours').Create({ start, stop, project, userId });
 
     return success(response);
   } catch (error) {

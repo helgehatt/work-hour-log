@@ -1,12 +1,12 @@
 import { Handler } from '@netlify/functions';
+import { main as PUT } from './hours/update';
+import { main as POST } from './hours/create';
+import { main as GET } from './hours/read';
+import { main as DELETE } from './hours/delete';
+
 const { success, failure } = require('./common');
 const jwt = require('./auth/jwt');
-const API = {
-  PUT: require('./hours/update').main,
-  POST: require('./hours/create').main,
-  GET: require('./hours/read').main,
-  DELETE: require('./hours/delete').main,
-};
+const API = { PUT, POST, GET, DELETE };
 
 export const handler: Handler = async (event, context) => {
   if (event.httpMethod === 'OPTIONS') {

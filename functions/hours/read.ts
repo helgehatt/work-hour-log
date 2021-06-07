@@ -1,7 +1,11 @@
+import { HandlerResponse } from '@netlify/functions';
+
 const database = require('../database');
 const { success, failure } = require('../common');
 
-exports.main = async ({ userId, month }) => {
+type Main = (args: { userId: string; month: string }) => Promise<HandlerResponse>;
+
+export const main: Main = async ({ userId, month }) => {
   if (!month) {
     return failure('Missing parameters');
   }
