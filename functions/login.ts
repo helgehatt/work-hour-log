@@ -1,23 +1,24 @@
-const { success, failure } = require('./common');
-const jwt = require('./auth/jwt');
-const pw = require('./auth/pw');
-const session = require('./auth/session');
+import { Handler } from '@netlify/functions';
+import { success, failure } from './common';
+import jwt from './auth/jwt';
+import pw from './auth/pw';
+import session from './auth/session';
 
-exports.handler = async (event, context, callback) => {
+export const handler: Handler = async (event, context) => {
   if (event.httpMethod === 'OPTIONS') {
-    return callback(null, success());
+    return success();
   }
 
   const { username, password } = JSON.parse(event.body || '{}');
 
   if (!username || !password) {
-    return callback(null, failure('Missing parameters'));
+    return failure('Missing parameters');
   }
 
   const user = await pw.verify({ username, password });
 
   if (!user) {
-    return callback(null, failure('Invalid parameters'));
+    return failure('Invalid parameters');
   }
 
   const response = success({ token: jwt.sign(user) });
@@ -31,5 +32,5 @@ exports.handler = async (event, context, callback) => {
     response.headers['Set-Cookie'] = newCookie;
   }
 
-  return callback(null, response);
+  return response;
 };

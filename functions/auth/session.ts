@@ -1,12 +1,12 @@
-const crypto = require('crypto');
-const database = require('../database');
-const { urlEncode } = require('./util');
+import crypto from 'crypto';
+import database from '../database';
+import { urlEncode } from './util';
 
-exports.generateCookie = async ({ userId, headers }) => {
+const generateCookie = async ({ userId, headers }) => {
   const token = urlEncode(crypto.randomBytes(32).toString('base64'));
 
   try {
-    await database.Collection('sessions').Create({
+    await database.Sessions.Create({
       userId,
       token,
       host: headers['host'],
@@ -21,9 +21,9 @@ exports.generateCookie = async ({ userId, headers }) => {
   }
 };
 
-exports.validate = async ({ userId, token, headers }) => {
+const validate = async ({ userId, token, headers }) => {
   // Throws error if the session does not exist
-  const entry = await database.Index('session-by-token').Get([userId, token]);
+  const entry = await database.SessionByToken.Get([userId, token]);
 
   // if (headers['host'] !== entry['host']) {
   //   throw new Error('Unable to refresh token');
@@ -40,10 +40,18 @@ exports.validate = async ({ userId, token, headers }) => {
   return entry;
 };
 
-exports.invalidate = async ({ sessionId }) => {
+const invalidate = async ({ sessionId }) => {
   try {
-    await database.Collection('sessions').Delete(sessionId);
+    await database.Sessions.Delete(sessionId);
   } catch (error) {
     // Ignore error
   }
 };
+
+const session = {
+  generateCookie,
+  validate,
+  invalidate,
+};
+
+export default session;
