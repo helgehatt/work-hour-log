@@ -3,9 +3,9 @@ import { main as PUT } from './hours/update';
 import { main as POST } from './hours/create';
 import { main as GET } from './hours/read';
 import { main as DELETE } from './hours/delete';
+import { success, failure } from './common';
+import jwt from './auth/jwt';
 
-const { success, failure } = require('./common');
-const jwt = require('./auth/jwt');
 const API = { PUT, POST, GET, DELETE };
 
 export const handler: Handler = async (event, context) => {

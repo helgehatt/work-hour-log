@@ -1,7 +1,6 @@
 import { HandlerResponse } from '@netlify/functions';
-
-const database = require('../database');
-const { success, failure } = require('../common');
+import { success, failure } from '../common';
+import database from '../database';
 
 type Main = (args: { userId: string; id: string }) => Promise<HandlerResponse>;
 
@@ -15,13 +14,14 @@ export const main: Main = async ({ userId, id }) => {
   }
 
   try {
-    const entry = await database.Collection('hours').Get(id);
+    const entry = await database.Hours.Get(id);
 
     if (entry.userId !== userId) {
       return failure('Invalid parameters');
     }
 
-    const response = await database.Collection('hours').Delete(id);
+    const response = await database.Hours.Delete(id);
+
     return success(response);
   } catch (error) {
     return failure(error);

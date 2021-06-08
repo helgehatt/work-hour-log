@@ -1,7 +1,6 @@
 import { HandlerResponse } from '@netlify/functions';
-
-const database = require('../database');
-const { success, failure } = require('../common');
+import { success, failure } from '../common';
+import database from '../database';
 
 type Main = (args: {
   userId: string;
@@ -24,7 +23,7 @@ export const main: Main = async ({ userId, start, stop, project }) => {
   }
 
   try {
-    const response = await database.Collection('hours').Create({ start, stop, project, userId });
+    const response = await database.Hours.Create({ start, stop, project, userId });
 
     return success(response);
   } catch (error) {

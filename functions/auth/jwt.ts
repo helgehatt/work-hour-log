@@ -1,13 +1,14 @@
-const crypto = require('crypto');
-const { base64Encode, base64Decode } = require('./util');
+import crypto from 'crypto';
+import { HandlerEvent } from '@netlify/functions';
+import { base64Encode, base64Decode } from './util';
 
-const encrypt = input => {
+const encrypt = (input: string) => {
   const hmac = crypto.createHmac('sha256', process.env.JWT_SECRET_KEY);
   hmac.update(input);
   return hmac.digest('base64');
 };
 
-exports.sign = payload => {
+const sign = (payload: { sub: string; name: string }) => {
   const base64Header = base64Encode({
     alg: 'HS256',
     typ: 'JWT',
@@ -24,7 +25,7 @@ exports.sign = payload => {
   return [base64Header, base64Payload, base64Signature].join('.');
 };
 
-exports.verify = (headers, checkExp = true) => {
+const verify = (headers: HandlerEvent['headers'], checkExp = true) => {
   if (!headers['authorization']) {
     throw new Error('Authorization header missing');
   }
@@ -49,3 +50,10 @@ exports.verify = (headers, checkExp = true) => {
 
   return payload;
 };
+
+const jwt = {
+  sign,
+  verify,
+};
+
+export default jwt;

@@ -1,11 +1,12 @@
-const { success, failure } = require('./common');
-const jwt = require('./auth/jwt');
-const session = require('./auth/session');
-const { readCookie } = require('./auth/util');
+import { Handler } from '@netlify/functions';
+import { success, failure } from './common';
+import { readCookie } from './auth/util';
+import jwt from './auth/jwt';
+import session from './auth/session';
 
-exports.handler = async (event, context, callback) => {
+export const handler: Handler = async (event, context) => {
   if (event.httpMethod === 'OPTIONS') {
-    return callback(null, success());
+    return success();
   }
 
   const cookie = readCookie(event.headers['cookie']);
@@ -32,8 +33,8 @@ exports.handler = async (event, context, callback) => {
       response.headers['Set-Cookie'] = newCookie;
     }
 
-    return callback(null, response);
+    return response;
   } catch (error) {
-    return callback(null, failure(error));
+    return failure(error);
   }
 };

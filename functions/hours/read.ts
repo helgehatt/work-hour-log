@@ -1,7 +1,6 @@
 import { HandlerResponse } from '@netlify/functions';
-
-const database = require('../database');
-const { success, failure } = require('../common');
+import { success, failure } from '../common';
+import database from '../database';
 
 type Main = (args: { userId: string; month: string }) => Promise<HandlerResponse>;
 
@@ -11,7 +10,8 @@ export const main: Main = async ({ userId, month }) => {
   }
 
   try {
-    const response = await database.Index('hours-by-month').Paginate([userId, month]);
+    const response = await database.HoursByMonth.Paginate([userId, month]);
+
     return success(transform(response));
   } catch (error) {
     return failure(error);
