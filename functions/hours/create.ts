@@ -5,25 +5,31 @@ import database from '../database';
 
 type Main = (args: DatabaseHour) => Promise<HandlerResponse>;
 
-export const main: Main = async ({ start, stop, project, break: break_, userId }) => {
-  if (!start || !stop) {
+export const main: Main = async args => {
+  if (!args.start || !args.stop) {
     return failure('Missing parameters');
   }
 
-  if (!Date.parse(start) || !Date.parse(stop)) {
+  if (!Date.parse(args.start) || !Date.parse(args.stop)) {
     return failure('Invalid parameters');
   }
 
-  if (!(project == null || typeof project === 'string')) {
+  if (!(args.project == null || typeof args.project === 'string')) {
     return failure('Invalid parameters');
   }
 
-  if (!(break_ == null || typeof break_ === 'string')) {
+  if (!(args.break == null || typeof args.break === 'string')) {
     return failure('Invalid parameters');
   }
 
   try {
-    const response = await database.Hours.Create({ start, stop, project, break: break_, userId });
+    const response = await database.Hours.Create({
+      start: args.start,
+      stop: args.stop,
+      project: args.project,
+      break: args.break,
+      userId: args.userId,
+    });
 
     return success(response);
   } catch (error) {
