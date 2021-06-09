@@ -34,7 +34,7 @@ const Root = styled(Container)`
     display: flex;
     > * {
       flex-grow: 1;
-      :first-child {
+      :not(:last-child) {
         margin-right: 0.5rem;
       }
     }
@@ -44,6 +44,7 @@ const Root = styled(Container)`
 const schemeFactory = miniform.createFormScheme((props: IProps) => ({
   start: { value: '09:00' },
   stop: { value: '17:00' },
+  break: { value: '00:30' },
   project: { value: '' },
 }));
 
@@ -58,6 +59,7 @@ const AddEntry: React.FC<IProps> = miniform.withFormData(schemeFactory)(props =>
       API.actions.hours.create({
         start: props.date + `T${props.start.value}:00Z`,
         stop: props.date + `T${props.stop.value}:00Z`,
+        break: props.break.value,
         project: props.project.value || undefined,
       })
     );
@@ -96,6 +98,20 @@ const AddEntry: React.FC<IProps> = miniform.withFormData(schemeFactory)(props =>
               }}
               value={props.stop.value}
               onChange={props.stop.onChange}
+            />
+            <TextField
+              id='entry-break'
+              label='Break'
+              type='time'
+              variant='outlined'
+              InputLabelProps={{
+                shrink: true,
+              }}
+              inputProps={{
+                step: 60,
+              }}
+              value={props.break.value}
+              onChange={props.break.onChange}
             />
           </div>
           <Autocomplete

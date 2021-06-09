@@ -1,13 +1,14 @@
 import { Client, query as q } from 'faunadb';
+import * as t from './types/database';
 
 const client = new Client({ secret: process.env.FAUNADB_SERVER_SECRET });
-const query = <T>(expr: q.ExprArg) => client.query<DatabaseResponse<T>>(expr);
-const unpack = <T>({ ref, data }: DatabaseResponse<T>) => ({ id: ref.id, ...data });
+const query = <T>(expr: q.ExprArg) => client.query<t.DatabaseResponse<T>>(expr);
+const unpack = <T>({ ref, data }: t.DatabaseResponse<T>) => ({ id: ref.id, ...data });
 
 class DatabaseCollection<T> {
-  name: DatabaseCollectionName;
+  name: t.DatabaseCollectionName;
 
-  constructor(name: DatabaseCollectionName) {
+  constructor(name: t.DatabaseCollectionName) {
     this.name = name;
   }
 
@@ -29,31 +30,31 @@ class DatabaseCollection<T> {
 }
 
 class DatabaseIndex<T> {
-  name: DatabaseIndexName;
+  name: t.DatabaseIndexName;
 
-  constructor(name: DatabaseIndexName) {
+  constructor(name: t.DatabaseIndexName) {
     this.name = name;
   }
 
-  Get = async (key: DatabaseIndexKey) => {
+  Get = async (key: t.DatabaseIndexKey) => {
     return query<T>(q.Get(q.Match(q.Index(this.name), key))).then(unpack);
   };
 
-  Paginate = async (key: DatabaseIndexKey) => {
+  Paginate = async (key: t.DatabaseIndexKey) => {
     const items = q.Paginate(q.Match(q.Index(this.name), key));
     const mapper = q.Lambda('i', q.Get(q.Var('i')));
-    return query<DatabaseResponse<T>[]>(q.Map(items, mapper)).then(response =>
+    return query<t.DatabaseResponse<T>[]>(q.Map(items, mapper)).then(response =>
       response.data.map(unpack)
     );
   };
 }
 
 const database = {
-  Hours: new DatabaseCollection<DatabaseHour>('hours'),
-  HoursByMonth: new DatabaseIndex<DatabaseHour>('hours-by-month'),
-  Sessions: new DatabaseCollection<DatabaseSession>('sessions'),
-  SessionByToken: new DatabaseIndex<DatabaseSession>('session-by-token'),
-  UserByUsername: new DatabaseIndex<DatabaseUser>('user-by-username'),
+  Hours: new DatabaseCollection<t.DatabaseHour>('hours'),
+  HoursByMonth: new DatabaseIndex<t.DatabaseHour>('hours-by-month'),
+  Sessions: new DatabaseCollection<t.DatabaseSession>('sessions'),
+  SessionByToken: new DatabaseIndex<t.DatabaseSession>('session-by-token'),
+  UserByUsername: new DatabaseIndex<t.DatabaseUser>('user-by-username'),
 };
 
 export default database;

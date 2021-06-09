@@ -10,13 +10,13 @@ const handleOptions = ({ headers, ...options }: RequestInit): RequestInit => ({
   ...options,
 });
 
-const handleResponse = async <T>(response: Response) => {
+const handleResponse = async (response: Response) => {
   const payload = await response.json();
   if (!response.ok) throw payload;
-  return payload as T;
+  return payload;
 };
 
-const request = <T = any>(url: string, options: RequestInit) =>
-  fetch(`/.netlify/functions/${url}`, handleOptions(options)).then(response => handleResponse<T>(response));
+const request = <T = any>(url: string, options: RequestInit): Promise<T> =>
+  fetch(`/.netlify/functions/${url}`, handleOptions(options)).then(handleResponse);
 
 export default request;
