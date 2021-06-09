@@ -8,6 +8,7 @@ interface WorkHourEntry {
   id: string;
   start: string;
   stop: string;
+  break?: string;
   project?: string;
 }
 

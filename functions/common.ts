@@ -4,7 +4,7 @@ export const success = (response?: any, statusCode = 200): HandlerResponse => {
   if (typeof response !== 'object') {
     response = { response: String(response) };
   }
-  return { statusCode, body: JSON.stringify(response) };
+  return { statusCode, body: JSON.stringify(response), headers: {} };
 };
 
 export const failure = (error: any, statusCode = 400): HandlerResponse => {
@@ -13,5 +13,5 @@ export const failure = (error: any, statusCode = 400): HandlerResponse => {
   } else if (typeof error !== 'object') {
     error = { message: error ?? 'Unknown' };
   }
-  return { statusCode, body: JSON.stringify(error) };
+  return { statusCode, body: JSON.stringify(error), headers: {} };
 };
