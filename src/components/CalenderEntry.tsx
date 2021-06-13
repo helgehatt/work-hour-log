@@ -11,9 +11,7 @@ interface IProps extends WorkHourEntry {
   disabled?: boolean;
 }
 
-const Root = styled(Button)`
-  margin-top: 2px;
-`;
+const Root = styled(Button)``;
 
 const CalenderEntry: React.FC<IProps> = ({ disabled, ...entry }) => {
   const { showModal } = useModal();
@@ -44,7 +42,12 @@ const CalenderEntry: React.FC<IProps> = ({ disabled, ...entry }) => {
 };
 
 const getTime = (timestamp: string) =>
-  moment.utc(timestamp).format(moment.HTML5_FMT.TIME).replace(/:00$/, '').replace(/:30$/, '\u00BD').replace(/^0/, '');
+  moment
+    .utc(timestamp)
+    .format(moment.HTML5_FMT.TIME)
+    .replace(/:00$/, '')
+    .replace(/:30$/, '\u00BD')
+    .replace(/^0/, '');
 
 const getDuration = (start: string, stop: string) =>
   String(moment.utc(stop).diff(moment.utc(start), 'minutes') / 60).replace(/.5$/, '\u00BD');

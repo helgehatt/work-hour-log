@@ -10,15 +10,11 @@ interface IProps {}
 const Root = styled.div`
   display: grid;
   grid-template-columns: repeat(7, 1fr);
+  text-align: center;
 
   > * {
     border-right: #dadce0 1px solid;
     border-bottom: #dadce0 1px solid;
-    border-radius: 0;
-
-    :nth-child(-n + 7) {
-      text-align: center;
-    }
 
     :nth-child(7n + 0) {
       border-right: none;

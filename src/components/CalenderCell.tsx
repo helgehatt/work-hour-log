@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import CalenderEntry from 'src/components/CalenderEntry';
 import { useModal } from 'src/components/AppProviders/ModalProvider';
 import AddEntry from 'src/components/AddEntry';
-import Chip from '@material-ui/core/Chip';
 import CalendarHooks from 'src/components/AppHooks/CalendarHooks';
 
 interface IProps {
@@ -11,19 +10,26 @@ interface IProps {
 }
 
 const Root = styled.div`
-  display: block;
-  text-align: center;
   min-height: 10rem;
   padding: 0;
   overflow-x: hidden;
+  cursor: pointer;
+  transition: background-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
 
-  > span {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+  :hover {
+    background-color: rgba(0, 0, 0, 0.04);
   }
-  .MuiChip-colorNone {
-    background-color: unset;
+
+  > *:first-child {
+    display: inline-block;
+    padding-left: 8px;
+    padding-right: 8px;
+    border-radius: 16px;
+  }
+
+  > * {
+    margin-top: 2px !important;
+    min-width: unset !important;
   }
 `;
 
@@ -35,19 +41,11 @@ const CalenderCell: React.FC<IProps> = ({ date }) => {
     showModal(<AddEntry date={date} />);
   };
 
-  const classes = ['MuiButtonBase-root', 'MuiButton-root'];
-
-  if (!isActive) {
-    classes.push('Mui-disabled');
-  }
-
   return (
-    <Root onClick={handleClick} className={classes.join(' ')}>
-      <Chip
-        label={Number(date.substr(8))}
-        size='small'
-        className={isToday ? 'MuiChip-colorSecondary' : 'MuiChip-colorNone'}
-      />
+    <Root onClick={handleClick}>
+      <div className={isToday ? 'MuiAppBar-colorSecondary' : undefined}>
+        <span>{Number(date.substr(8))}</span>
+      </div>
       {hours?.map(entry => (
         <CalenderEntry key={entry.id} {...entry} disabled={!isActive} />
       ))}
