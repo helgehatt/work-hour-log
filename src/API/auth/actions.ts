@@ -6,6 +6,11 @@ const login = (payload: Parameter<typeof requests.login>) => ({
   payload,
 });
 
+const logout = (payload: Parameter<typeof requests.logout>) => ({
+  type: constants.AUTH_LOGOUT,
+  payload,
+});
+
 const refresh = (payload: Parameter<typeof requests.refresh>) => ({
   type: constants.AUTH_REFRESH,
   payload,
@@ -13,6 +18,7 @@ const refresh = (payload: Parameter<typeof requests.refresh>) => ({
 
 const actions = {
   login,
+  logout,
   refresh,
 };
 

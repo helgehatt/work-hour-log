@@ -1,17 +1,18 @@
+import { HandlerEvent } from '@netlify/functions';
 import crypto from 'crypto';
 import database from '../database';
 import { urlEncode } from './util';
 
-const generateCookie = async ({ userId, headers }) => {
+const generateCookie = async (input: { userId: string; headers: HandlerEvent['headers'] }) => {
   const token = urlEncode(crypto.randomBytes(32).toString('base64'));
 
   try {
     await database.Sessions.Create({
-      userId,
-      token,
-      host: headers['host'],
-      'user-agent': headers['user-agent'],
-      'client-ip': headers['client-ip'],
+      userId: input.userId,
+      token: token,
+      host: input.headers['host'],
+      'user-agent': input.headers['user-agent'],
+      'client-ip': input.headers['client-ip'],
     });
 
     // The Max-Age coincides with FaunaDB TTL setting
@@ -21,9 +22,17 @@ const generateCookie = async ({ userId, headers }) => {
   }
 };
 
-const validate = async ({ userId, token, headers }) => {
+const deleteCookie = () => {
+  return 'session=deleted; expires=Thu, 01 Jan 1970 00:00:00 GMT; HttpOnly; SameSite=Strict';
+};
+
+const validate = async (input: {
+  userId: string;
+  token: string;
+  headers: HandlerEvent['headers'];
+}) => {
   // Throws error if the session does not exist
-  const entry = await database.SessionByToken.Get([userId, token]);
+  const entry = await database.SessionByToken.Get([input.userId, input.token]);
 
   // if (headers['host'] !== entry['host']) {
   //   throw new Error('Unable to refresh token');
@@ -40,9 +49,9 @@ const validate = async ({ userId, token, headers }) => {
   return entry;
 };
 
-const invalidate = async ({ sessionId }) => {
+const invalidate = async (input: { sessionId: string }) => {
   try {
-    await database.Sessions.Delete(sessionId);
+    await database.Sessions.Delete(input.sessionId);
   } catch (error) {
     // Ignore error
   }
@@ -50,6 +59,7 @@ const invalidate = async ({ sessionId }) => {
 
 const session = {
   generateCookie,
+  deleteCookie,
   validate,
   invalidate,
 };

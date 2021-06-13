@@ -15,9 +15,9 @@ export interface DatabaseHour {
 export interface DatabaseSession {
   userId: string;
   token: string;
-  host: string;
-  'user-agent': string;
-  'client-ip': string;
+  host?: string;
+  'user-agent'?: string;
+  'client-ip'?: string;
 }
 
 export interface DatabaseUser {

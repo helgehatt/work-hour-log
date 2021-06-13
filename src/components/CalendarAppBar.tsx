@@ -9,9 +9,12 @@ import NavigateBeforeIcon from '@material-ui/icons/NavigateBefore';
 import NavigateNextIcon from '@material-ui/icons/NavigateNext';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
+import API from 'src/API';
+import LoginForm from 'src/components/LoginForm';
 import { useCalender } from 'src/components/AppProviders/CalenderProvider';
 import { useModal } from 'src/components/AppProviders/ModalProvider';
-import LoginForm from 'src/components/LoginForm';
+import { useDispatch } from 'src/components/AppProviders/EventProvider';
+import { useAuth } from 'src/components/AppProviders/AuthProvider';
 
 interface IProps {
   toggleDrawer: React.MouseEventHandler<HTMLButtonElement>;
@@ -32,6 +35,8 @@ const Root = styled(AppBar)`
 const CalendarAppBar: React.FC<IProps> = ({ toggleDrawer }) => {
   const { showModal } = useModal();
   const { month, setMonth } = useCalender();
+  const dispatch = useDispatch();
+  const auth = useAuth();
 
   const prevMonth = () =>
     setMonth(moment(month).subtract(1, 'month').format(moment.HTML5_FMT.MONTH));
@@ -54,9 +59,15 @@ const CalendarAppBar: React.FC<IProps> = ({ toggleDrawer }) => {
             <NavigateNextIcon />
           </IconButton>
         </Toolbar>
-        <Button color='inherit' onClick={() => showModal(<LoginForm />)}>
-          Login
-        </Button>
+        {auth.isAuthenticated ? (
+          <Button color='inherit' onClick={() => dispatch(API.actions.auth.logout({}))}>
+            Logout
+          </Button>
+        ) : (
+          <Button color='inherit' onClick={() => showModal(<LoginForm />)}>
+            Login
+          </Button>
+        )}
       </Toolbar>
     </Root>
   );

@@ -1,7 +1,7 @@
 import { Client, query as q } from 'faunadb';
 import * as t from './types/database';
 
-const client = new Client({ secret: process.env.FAUNADB_SERVER_SECRET });
+const client = new Client({ secret: process.env.FAUNADB_SERVER_SECRET as string });
 const query = <T>(expr: q.ExprArg) => client.query<t.DatabaseResponse<T>>(expr);
 const unpack = <T>({ ref, data }: t.DatabaseResponse<T>) => ({ id: ref.id, ...data });
 

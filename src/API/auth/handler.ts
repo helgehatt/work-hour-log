@@ -9,6 +9,11 @@ const handler = (event: ReturnType<UnionType<typeof actions>>) => {
         .login(event.payload)
         .then(payload => ({ type: constants.AUTH_LOGIN_SUCCESS, payload }))
         .catch(payload => ({ type: constants.AUTH_LOGIN_FAILURE, payload }));
+    case constants.AUTH_LOGOUT:
+      return requests
+        .logout(event.payload)
+        .then(payload => ({ type: constants.AUTH_LOGOUT_SUCCESS, payload }))
+        .catch(payload => ({ type: constants.AUTH_LOGOUT_FAILURE, payload }));
     case constants.AUTH_REFRESH:
       return requests
         .refresh(event.payload)

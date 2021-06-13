@@ -1,4 +1,5 @@
 import { HandlerResponse } from '@netlify/functions';
+import { DatabaseHour } from 'functions/types/database';
 import { success, failure } from '../common';
 import database from '../database';
 
@@ -18,10 +19,9 @@ export const main: Main = async ({ userId, month }) => {
   }
 };
 
-const transform = response =>
-  response.reduce((acc, entry) => {
-    delete entry.userId;
+const transform = (response: ({ id: string } & DatabaseHour)[]) =>
+  response.reduce((acc, { userId, ...entry }) => {
     const key = entry.start.substr(0, 10);
     acc[key] = Object.assign(acc[key] || {}, { [entry.id]: entry });
     return acc;
-  }, {});
+  }, {} as Record<string, Omit<DatabaseHour, 'userId'>>);

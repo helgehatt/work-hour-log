@@ -25,21 +25,14 @@ export const handler: Handler = async (event, context) => {
     });
 
     await session.invalidate({ sessionId: oldSession.id });
-
-    const response = success({ token: jwt.sign(payload) });
-
-    const newCookie = await session.generateCookie({
-      userId: payload.sub,
-      headers: event.headers,
-    });
-
-    if (newCookie) {
-      if (response.headers == null) response.headers = {};
-      response.headers['Set-Cookie'] = newCookie;
-    }
-
-    return response;
   } catch (error) {
-    return failure(error);
+    // Ignore error
   }
+
+  const response = success();
+
+  if (response.headers == null) response.headers = {};
+  response.headers['Set-Cookie'] = session.deleteCookie();
+
+  return response;
 };
