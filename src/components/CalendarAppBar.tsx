@@ -13,25 +13,34 @@ import { useCalender } from 'src/components/AppProviders/CalenderProvider';
 import { useModal } from 'src/components/AppProviders/ModalProvider';
 import LoginForm from 'src/components/LoginForm';
 
-interface IProps {}
+interface IProps {
+  toggleDrawer: React.MouseEventHandler<HTMLButtonElement>;
+}
 
 const Root = styled(AppBar)`
   > * {
     justify-content: space-between;
+
+    @media (min-width: 960px) {
+      > *:first-child {
+        visibility: hidden;
+      }
+    }
   }
 `;
 
-const CalendarAppBar: React.FC<IProps> = () => {
+const CalendarAppBar: React.FC<IProps> = ({ toggleDrawer }) => {
   const { showModal } = useModal();
   const { month, setMonth } = useCalender();
 
-  const prevMonth = () => setMonth(moment(month).subtract(1, 'month').format(moment.HTML5_FMT.MONTH));
+  const prevMonth = () =>
+    setMonth(moment(month).subtract(1, 'month').format(moment.HTML5_FMT.MONTH));
   const nextMonth = () => setMonth(moment(month).add(1, 'month').format(moment.HTML5_FMT.MONTH));
 
   return (
     <Root position='static'>
       <Toolbar>
-        <IconButton edge='start' color='inherit' aria-label='menu'>
+        <IconButton edge='start' color='inherit' aria-label='menu' onClick={toggleDrawer}>
           <MenuIcon />
         </IconButton>
         <Toolbar disableGutters>
