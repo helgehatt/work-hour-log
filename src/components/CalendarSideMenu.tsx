@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import AvTimerIcon from '@material-ui/icons/AvTimer';
 import BarChartIcon from '@material-ui/icons/BarChart';
 import Divider from '@material-ui/core/Divider';
-import Drawer from '@material-ui/core/Drawer';
 import EventIcon from '@material-ui/icons/Event';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
@@ -17,15 +16,9 @@ import { useHistory, useLocation } from 'react-router-dom';
 
 interface IProps {}
 
-const Root = styled(Drawer)`
-  width: 240px;
+const Root = styled.div``;
 
-  > * {
-    width: 240px;
-  }
-`;
-
-const CalendarDrawer: React.FC<IProps> = () => {
+const CalendarSideMenu: React.FC<IProps> = () => {
   const history = useHistory();
   const location = useLocation();
   const { showDuration, setShowDuration } = useCalender();
@@ -33,7 +26,7 @@ const CalendarDrawer: React.FC<IProps> = () => {
   const tab = location.pathname === '/stats' ? 'stats' : 'calendar';
 
   return (
-    <Root variant='permanent' anchor='left'>
+    <Root>
       <Toolbar>
         <Typography variant='h6' color='primary'>
           work-hour-log
@@ -41,13 +34,21 @@ const CalendarDrawer: React.FC<IProps> = () => {
       </Toolbar>
       <Divider />
       <List>
-        <ListItem button onClick={() => tab !== 'calendar' && history.push('/')} selected={tab === 'calendar'}>
+        <ListItem
+          button
+          onClick={() => tab !== 'calendar' && history.push('/')}
+          selected={tab === 'calendar'}
+        >
           <ListItemIcon>
             <EventIcon />
           </ListItemIcon>
           <ListItemText>Calendar</ListItemText>
         </ListItem>
-        <ListItem button onClick={() => tab !== 'stats' && history.push('/stats')} selected={tab === 'stats'}>
+        <ListItem
+          button
+          onClick={() => tab !== 'stats' && history.push('/stats')}
+          selected={tab === 'stats'}
+        >
           <ListItemIcon>
             <BarChartIcon />
           </ListItemIcon>
@@ -68,4 +69,4 @@ const CalendarDrawer: React.FC<IProps> = () => {
   );
 };
 
-export default CalendarDrawer;
+export default CalendarSideMenu;
