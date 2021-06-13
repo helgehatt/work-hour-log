@@ -22,6 +22,10 @@ const generateCookie = async (input: { userId: string; headers: HandlerEvent['he
   }
 };
 
+const deleteCookie = () => {
+  return 'session=deleted; expires=Thu, 01 Jan 1970 00:00:00 GMT; HttpOnly; SameSite=Strict';
+};
+
 const validate = async (input: {
   userId: string;
   token: string;
@@ -55,6 +59,7 @@ const invalidate = async (input: { sessionId: string }) => {
 
 const session = {
   generateCookie,
+  deleteCookie,
   validate,
   invalidate,
 };

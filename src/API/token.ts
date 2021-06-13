@@ -6,20 +6,22 @@ const get = () => window.localStorage.getItem('token');
 
 const set = (token: string) => window.localStorage.setItem('token', token);
 
+const remove = () => window.localStorage.removeItem('token');
+
 const payload = () => {
-  const token = get();
-  if (token == null) return {};
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [header, payload, signature] = token.split('.');
-  if (payload == null) return {};
-  return base64Decode(token.split('.')[1]);
+  try {
+    return base64Decode((get() || '').split('.')[1]);
+  } catch (error) {
+    return {};
+  }
 };
 
-const isValid = () => payload()?.exp > Date.now() / 1000;
+const isValid = () => payload().exp > Date.now() / 1000;
 
 const token = {
   get,
   set,
+  remove,
   payload,
   isValid,
 };

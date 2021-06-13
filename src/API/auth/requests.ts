@@ -6,6 +6,12 @@ const login = (data: { username: string; password: string }) =>
     body: JSON.stringify(data),
   });
 
+const logout = (data: {}) =>
+  request<{ token: string }>('logout', {
+    method: 'POST',
+    body: JSON.stringify(data),
+  });
+
 const refresh = (data: {}) =>
   request<{ token: string }>('refresh', {
     method: 'POST',
@@ -14,6 +20,7 @@ const refresh = (data: {}) =>
 
 const requests = {
   login,
+  logout,
   refresh,
 };
 

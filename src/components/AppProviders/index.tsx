@@ -1,14 +1,17 @@
 import React from 'react';
-import EventProvider from './EventProvider';
-import ModalProvider from './ModalProvider';
-import CalenderProvider from './CalenderProvider';
+import AuthProvider from 'src/components/AppProviders/AuthProvider';
+import CalenderProvider from 'src/components/AppProviders/CalenderProvider';
+import EventProvider from 'src/components/AppProviders/EventProvider';
+import ModalProvider from 'src/components/AppProviders/ModalProvider';
 
 const AppProviders: React.FC = ({ children }) => {
   return (
     <EventProvider>
-      <CalenderProvider>
-        <ModalProvider>{children}</ModalProvider>
-      </CalenderProvider>
+      <AuthProvider>
+        <CalenderProvider>
+          <ModalProvider>{children}</ModalProvider>
+        </CalenderProvider>
+      </AuthProvider>
     </EventProvider>
   );
 };
