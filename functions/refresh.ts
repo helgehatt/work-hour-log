@@ -9,10 +9,14 @@ export const handler: Handler = async (event, context) => {
     return success();
   }
 
+  if (event.httpMethod !== 'POST') {
+    return failure('Method not allowed', 405);
+  }
+
   const cookie = readCookie(event.headers['cookie']);
 
   try {
-    const payload = jwt.verify(event.headers, false);
+    const payload = jwt.verify(event.headers['authorization'], false);
 
     const oldSession = await session.validate({
       userId: payload.sub,
@@ -30,6 +34,7 @@ export const handler: Handler = async (event, context) => {
     });
 
     if (newCookie) {
+      if (response.headers == null) response.headers = {};
       response.headers['Set-Cookie'] = newCookie;
     }
 

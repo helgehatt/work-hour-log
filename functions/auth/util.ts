@@ -16,9 +16,12 @@ export const urlDecode = (input: string) => {
   return encoded;
 };
 
-export const readCookie = (input: string) => {
-  return input.split(';').reduce((acc, cookie) => {
-    const [key, value] = cookie.split('=', 2);
-    return Object.assign(acc, { [key]: value });
-  }, {} as { session: string });
+export const readCookie = (input?: string) => {
+  return (input || '').split(';').reduce(
+    (acc, cookie) => {
+      const [key, value] = cookie.split('=', 2);
+      return Object.assign(acc, { [key]: value });
+    },
+    { session: '' }
+  );
 };

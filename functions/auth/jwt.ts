@@ -1,9 +1,8 @@
 import crypto from 'crypto';
-import { HandlerEvent } from '@netlify/functions';
 import { base64Encode, base64Decode } from './util';
 
 const encrypt = (input: string) => {
-  const hmac = crypto.createHmac('sha256', process.env.JWT_SECRET_KEY);
+  const hmac = crypto.createHmac('sha256', process.env.JWT_SECRET_KEY as string);
   hmac.update(input);
   return hmac.digest('base64');
 };
@@ -25,12 +24,12 @@ const sign = (payload: { sub: string; name: string }) => {
   return [base64Header, base64Payload, base64Signature].join('.');
 };
 
-const verify = (headers: HandlerEvent['headers'], checkExp = true) => {
-  if (!headers['authorization']) {
-    throw new Error('Authorization header missing');
+const verify = (authorization?: string, checkExp = true) => {
+  if (authorization == null) {
+    throw new Error('Authorization is missing');
   }
 
-  const [type, credentials] = headers['authorization'].split(' ');
+  const [type, credentials] = authorization.split(' ');
 
   if (type !== 'Bearer' || credentials == null) {
     throw new Error('Authorization credentials missing');

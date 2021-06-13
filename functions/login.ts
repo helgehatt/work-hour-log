@@ -9,6 +9,10 @@ export const handler: Handler = async (event, context) => {
     return success();
   }
 
+  if (event.httpMethod !== 'POST') {
+    return failure('Method not allowed', 405);
+  }
+
   const { username, password } = JSON.parse(event.body || '{}');
 
   if (!username || !password) {
@@ -29,6 +33,7 @@ export const handler: Handler = async (event, context) => {
   });
 
   if (newCookie) {
+    if (response.headers == null) response.headers = {};
     response.headers['Set-Cookie'] = newCookie;
   }
 
