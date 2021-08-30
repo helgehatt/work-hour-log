@@ -6,6 +6,7 @@ import { useModal } from 'src/components/AppProviders/ModalProvider';
 import { useCalender } from 'src/components/AppProviders/CalenderProvider';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
+import TimeText from 'src/components/TimeText';
 
 interface IProps extends WorkHourEntry {
   disabled?: boolean;
@@ -23,6 +24,16 @@ const CalenderEntry: React.FC<IProps> = ({ disabled, ...entry }) => {
     showModal(<EditEntry entry={entry} />);
   };
 
+  const start = moment.utc(entry.start);
+  const stop = moment.utc(entry.stop);
+  const break_ = (entry.break ?? '00:00')
+    .split(':')
+    .map(Number)
+    .map((v, i) => v * [60, 1][i]) // Convert hours to minutes
+    .reduce((x, y) => x + y, 0); // Sum list of minutes
+
+  const duration = stop.diff(start, 'minutes') - break_;
+
   return (
     <Root
       onClick={handleClick}
@@ -33,23 +44,18 @@ const CalenderEntry: React.FC<IProps> = ({ disabled, ...entry }) => {
       disabled={disabled}
     >
       <Typography variant='body2'>
-        {showDuration
-          ? getDuration(entry.start, entry.stop)
-          : `${getTime(entry.start)}\u00A0-\u00A0${getTime(entry.stop)}`}
+        {showDuration ? (
+          <TimeText hours={Math.floor(duration / 60)} minutes={duration % 60} />
+        ) : (
+          <>
+            <TimeText hours={start.hours()} minutes={start.minutes()} />
+            &nbsp;-&nbsp;
+            <TimeText hours={stop.hours()} minutes={stop.minutes()} />
+          </>
+        )}
       </Typography>
     </Root>
   );
 };
-
-const getTime = (timestamp: string) =>
-  moment
-    .utc(timestamp)
-    .format(moment.HTML5_FMT.TIME)
-    .replace(/:00$/, '')
-    .replace(/:30$/, '\u00BD')
-    .replace(/^0/, '');
-
-const getDuration = (start: string, stop: string) =>
-  String(moment.utc(stop).diff(moment.utc(start), 'minutes') / 60).replace(/.5$/, '\u00BD');
 
 export default CalenderEntry;
