@@ -1,11 +1,11 @@
 import React from 'react';
 import moment from 'moment';
-import { useCalender } from 'src/components/AppProviders/CalenderProvider';
+import { useCalendar } from 'src/components/AppProviders/CalendarProvider';
 
 const today = moment().format(moment.HTML5_FMT.DATE);
 
 const useDate = (date: string) => {
-  const context = useCalender();
+  const context = useCalendar();
   const month = date.substr(0, 7);
   return {
     isToday: date === today,
@@ -15,7 +15,7 @@ const useDate = (date: string) => {
 };
 
 const useProjects = () => {
-  const { hours } = useCalender();
+  const { hours } = useCalendar();
 
   return React.useMemo(() => {
     const projects = new Set<string>();
@@ -33,7 +33,7 @@ const useProjects = () => {
 };
 
 const useDurations_Project_Date = () => {
-  const { hours, month } = useCalender();
+  const { hours, month } = useCalendar();
   const projects = useProjects();
 
   return React.useMemo(() => {
@@ -59,7 +59,7 @@ const useDurations_Project_Date = () => {
 };
 
 const useDurations_Project_Month = () => {
-  const { hours } = useCalender();
+  const { hours } = useCalendar();
   const projects = useProjects();
 
   return React.useMemo(() => {

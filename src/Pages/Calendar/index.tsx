@@ -1,8 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
 import moment from 'moment';
-import CalenderCell from 'src/components/CalenderCell';
-import { useCalender } from 'src/components/AppProviders/CalenderProvider';
+import CalendarCell from 'src/Pages/Calendar/CalendarCell';
+import { useCalendar } from 'src/components/AppProviders/CalendarProvider';
 import Typography from '@material-ui/core/Typography';
 
 interface IProps {}
@@ -22,7 +22,7 @@ const Root = styled.div`
   }
 `;
 
-const getCalenderSpan = (month: string) => {
+const getCalendarSpan = (month: string) => {
   const start = moment(month).subtract(moment(month).isoWeekday(), 'days');
   return Array.from({ length: 6 * 7 }, (_, i) =>
     moment(start)
@@ -33,9 +33,9 @@ const getCalenderSpan = (month: string) => {
 
 const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 
-const CalenderGrid: React.FC<IProps> = () => {
-  const { month } = useCalender();
-  const dates = getCalenderSpan(month);
+const Calendar: React.FC<IProps> = () => {
+  const { month } = useCalendar();
+  const dates = getCalendarSpan(month);
   return (
     <Root>
       {days.map(day => (
@@ -44,10 +44,10 @@ const CalenderGrid: React.FC<IProps> = () => {
         </Typography>
       ))}
       {dates.map(date => (
-        <CalenderCell key={date} date={date} />
+        <CalendarCell key={date} date={date} />
       ))}
     </Root>
   );
 };
 
-export default CalenderGrid;
+export default Calendar;

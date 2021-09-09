@@ -1,11 +1,11 @@
 import React from 'react';
 import API from 'src/API';
-import { useCalender } from 'src/components/AppProviders/CalenderProvider';
+import { useCalendar } from 'src/components/AppProviders/CalendarProvider';
 import { useDispatch } from 'src/components/AppProviders/EventProvider';
 
-const CalenderEffects: React.FC = ({ children }) => {
+const CalendarEffects: React.FC = ({ children }) => {
   const dispatch = useDispatch();
-  const { setLoading, month, hours, setHours } = useCalender();
+  const { setLoading, month, hours, setHours } = useCalendar();
 
   // Toggle loading when reading or authenticating
   React.useEffect(() => {
@@ -70,4 +70,4 @@ const CalenderEffects: React.FC = ({ children }) => {
   return <>{children}</>;
 };
 
-export default CalenderEffects;
+export default CalendarEffects;

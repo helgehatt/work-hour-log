@@ -1,25 +1,29 @@
 import React from 'react';
 import styled from 'styled-components';
 import moment from 'moment';
-import EditEntry from 'src/components/EditEntry';
+import EditEntry from 'src/Pages/Calendar/EditEntry';
 import { useModal } from 'src/components/AppProviders/ModalProvider';
-import { useCalender } from 'src/components/AppProviders/CalenderProvider';
+import { useCalendar } from 'src/components/AppProviders/CalendarProvider';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
-import TimeText from 'src/components/TimeText';
+import TimeText from 'src/Pages/Calendar/TimeText';
 
 interface IProps extends WorkHourEntry {
   disabled?: boolean;
 }
 
-const Root = styled(Button)``;
+const Root = styled(Button)`
+  > span {
+    justify-content: space-evenly;
+  }
+`;
 
-const CalenderEntry: React.FC<IProps> = ({ disabled, ...entry }) => {
+const CalendarEntry: React.FC<IProps> = ({ disabled, ...entry }) => {
   const { showModal } = useModal();
-  const { showDuration } = useCalender();
+  const { showDuration } = useCalendar();
 
   const handleClick = (event: React.SyntheticEvent) => {
-    // Avoid propagation to CalenderCell
+    // Avoid propagation to CalendarCell
     event.stopPropagation();
     showModal(<EditEntry entry={entry} />);
   };
@@ -43,19 +47,22 @@ const CalenderEntry: React.FC<IProps> = ({ disabled, ...entry }) => {
       fullWidth
       disabled={disabled}
     >
-      <Typography variant='body2'>
-        {showDuration ? (
+      {showDuration ? (
+        <Typography variant='body2'>
           <TimeText hours={Math.floor(duration / 60)} minutes={duration % 60} />
-        ) : (
-          <>
+        </Typography>
+      ) : (
+        <>
+          <Typography variant='body2'>
             <TimeText hours={start.hours()} minutes={start.minutes()} />
-            &nbsp;-&nbsp;
+          </Typography>
+          <Typography variant='body2'>
             <TimeText hours={stop.hours()} minutes={stop.minutes()} />
-          </>
-        )}
-      </Typography>
+          </Typography>
+        </>
+      )}
     </Root>
   );
 };
 
-export default CalenderEntry;
+export default CalendarEntry;

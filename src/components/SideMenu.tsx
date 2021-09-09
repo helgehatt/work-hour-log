@@ -11,19 +11,19 @@ import ListItemText from '@material-ui/core/ListItemText';
 import Switch from '@material-ui/core/Switch';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
-import { useCalender } from 'src/components/AppProviders/CalenderProvider';
+import { useCalendar } from 'src/components/AppProviders/CalendarProvider';
 import { useHistory, useLocation } from 'react-router-dom';
 
 interface IProps {}
 
 const Root = styled.div``;
 
-const CalendarSideMenu: React.FC<IProps> = () => {
+const SideMenu: React.FC<IProps> = () => {
   const history = useHistory();
   const location = useLocation();
-  const { showDuration, setShowDuration } = useCalender();
+  const { showDuration, setShowDuration } = useCalendar();
 
-  const tab = location.pathname === '/stats' ? 'stats' : 'calendar';
+  const tab = location.pathname === '/overview' ? 'overview' : 'calendar';
 
   return (
     <Root>
@@ -46,13 +46,13 @@ const CalendarSideMenu: React.FC<IProps> = () => {
         </ListItem>
         <ListItem
           button
-          onClick={() => tab !== 'stats' && history.push('/stats')}
-          selected={tab === 'stats'}
+          onClick={() => tab !== 'overview' && history.push('/overview')}
+          selected={tab === 'overview'}
         >
           <ListItemIcon>
             <BarChartIcon />
           </ListItemIcon>
-          <ListItemText>Stats</ListItemText>
+          <ListItemText>Overview</ListItemText>
         </ListItem>
       </List>
       <Divider />
@@ -69,4 +69,4 @@ const CalendarSideMenu: React.FC<IProps> = () => {
   );
 };
 
-export default CalendarSideMenu;
+export default SideMenu;
