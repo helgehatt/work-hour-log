@@ -1,13 +1,13 @@
 import React from 'react';
 import AuthEffects from './AuthEffects';
 import ModalEffects from './ModalEffects';
-import CalenderEffects from './CalenderEffects';
+import CalendarEffects from './CalendarEffects';
 
 const AppEffects: React.FC = ({ children }) => {
   return (
     <AuthEffects>
       <ModalEffects>
-        <CalenderEffects>{children}</CalenderEffects>
+        <CalendarEffects>{children}</CalendarEffects>
       </ModalEffects>
     </AuthEffects>
   );

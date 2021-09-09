@@ -1,12 +1,12 @@
 import React from 'react';
 import styled from 'styled-components';
 import moment from 'moment';
-import EditEntry from 'src/components/EditEntry';
+import EditEntry from 'src/Pages/Calendar/EditEntry';
 import { useModal } from 'src/components/AppProviders/ModalProvider';
-import { useCalender } from 'src/components/AppProviders/CalenderProvider';
+import { useCalendar } from 'src/components/AppProviders/CalendarProvider';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
-import TimeText from 'src/components/TimeText';
+import TimeText from 'src/Pages/Calendar/TimeText';
 
 interface IProps extends WorkHourEntry {
   disabled?: boolean;
@@ -18,12 +18,12 @@ const Root = styled(Button)`
   }
 `;
 
-const CalenderEntry: React.FC<IProps> = ({ disabled, ...entry }) => {
+const CalendarEntry: React.FC<IProps> = ({ disabled, ...entry }) => {
   const { showModal } = useModal();
-  const { showDuration } = useCalender();
+  const { showDuration } = useCalendar();
 
   const handleClick = (event: React.SyntheticEvent) => {
-    // Avoid propagation to CalenderCell
+    // Avoid propagation to CalendarCell
     event.stopPropagation();
     showModal(<EditEntry entry={entry} />);
   };
@@ -65,4 +65,4 @@ const CalenderEntry: React.FC<IProps> = ({ disabled, ...entry }) => {
   );
 };
 
-export default CalenderEntry;
+export default CalendarEntry;

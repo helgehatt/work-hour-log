@@ -1,7 +1,7 @@
 import React from 'react';
 import moment from 'moment';
 
-const CalenderContext = React.createContext({
+const CalendarContext = React.createContext({
   isLoading: false,
   setLoading: (state: React.SetStateAction<boolean>): void => {
     throw new Error('Invalid context');
@@ -20,15 +20,15 @@ const CalenderContext = React.createContext({
   },
 });
 
-const CalenderProvider: React.FC = ({ children }) => {
-  const initial = React.useContext(CalenderContext);
+const CalendarProvider: React.FC = ({ children }) => {
+  const initial = React.useContext(CalendarContext);
   const [isLoading, setLoading] = React.useState(initial.isLoading);
   const [showDuration, setShowDuration] = React.useState(initial.showDuration);
   const [month, setMonth] = React.useState(initial.month);
   const [hours, setHours] = React.useState(initial.hours);
 
   return (
-    <CalenderContext.Provider
+    <CalendarContext.Provider
       value={{
         isLoading,
         setLoading,
@@ -41,10 +41,10 @@ const CalenderProvider: React.FC = ({ children }) => {
       }}
     >
       {children}
-    </CalenderContext.Provider>
+    </CalendarContext.Provider>
   );
 };
 
-export const useCalender = () => React.useContext(CalenderContext);
+export const useCalendar = () => React.useContext(CalendarContext);
 
-export default CalenderProvider;
+export default CalendarProvider;

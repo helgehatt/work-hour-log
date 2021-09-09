@@ -1,7 +1,7 @@
 import React from 'react';
 import moment from 'moment';
 import styled from 'styled-components';
-import AppBar from '@material-ui/core/AppBar';
+import MUIAppBar from '@material-ui/core/AppBar';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
@@ -11,7 +11,7 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import API from 'src/API';
 import LoginForm from 'src/components/LoginForm';
-import { useCalender } from 'src/components/AppProviders/CalenderProvider';
+import { useCalendar } from 'src/components/AppProviders/CalendarProvider';
 import { useModal } from 'src/components/AppProviders/ModalProvider';
 import { useDispatch } from 'src/components/AppProviders/EventProvider';
 import { useAuth } from 'src/components/AppProviders/AuthProvider';
@@ -20,7 +20,7 @@ interface IProps {
   toggleDrawer: React.MouseEventHandler<HTMLButtonElement>;
 }
 
-const Root = styled(AppBar)`
+const Root = styled(MUIAppBar)`
   > * {
     justify-content: space-between;
 
@@ -32,9 +32,9 @@ const Root = styled(AppBar)`
   }
 `;
 
-const CalendarAppBar: React.FC<IProps> = ({ toggleDrawer }) => {
+const AppBar: React.FC<IProps> = ({ toggleDrawer }) => {
   const { showModal } = useModal();
-  const { month, setMonth } = useCalender();
+  const { month, setMonth } = useCalendar();
   const dispatch = useDispatch();
   const auth = useAuth();
 
@@ -73,4 +73,4 @@ const CalendarAppBar: React.FC<IProps> = ({ toggleDrawer }) => {
   );
 };
 
-export default CalendarAppBar;
+export default AppBar;

@@ -1,5 +1,5 @@
 import React from 'react';
-import { useCalender } from 'src/components/AppProviders/CalenderProvider';
+import { useCalendar } from 'src/components/AppProviders/CalendarProvider';
 import styled from 'styled-components';
 import DurationsPerDate from 'src/components/Graphs/DurationsPerDate';
 import DurationsActiveMonth from 'src/components/Graphs/DurationsActiveMonth';
@@ -20,8 +20,8 @@ const Root = styled.div`
   }
 `;
 
-const CalenderStats: React.FC = () => {
-  const { showDuration } = useCalender();
+const Overview: React.FC = () => {
+  const { showDuration } = useCalendar();
 
   return (
     <Root>
@@ -44,4 +44,4 @@ const CalenderStats: React.FC = () => {
   );
 };
 
-export default CalenderStats;
+export default Overview;

@@ -1,6 +1,6 @@
 import React from 'react';
 import AuthProvider from 'src/components/AppProviders/AuthProvider';
-import CalenderProvider from 'src/components/AppProviders/CalenderProvider';
+import CalendarProvider from 'src/components/AppProviders/CalendarProvider';
 import EventProvider from 'src/components/AppProviders/EventProvider';
 import ModalProvider from 'src/components/AppProviders/ModalProvider';
 
@@ -8,9 +8,9 @@ const AppProviders: React.FC = ({ children }) => {
   return (
     <EventProvider>
       <AuthProvider>
-        <CalenderProvider>
+        <CalendarProvider>
           <ModalProvider>{children}</ModalProvider>
-        </CalenderProvider>
+        </CalendarProvider>
       </AuthProvider>
     </EventProvider>
   );

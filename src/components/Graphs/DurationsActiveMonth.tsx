@@ -1,12 +1,12 @@
 import React from 'react';
 import ReactApexChart from 'react-apexcharts';
 import CalendarHooks from 'src/components/AppHooks/CalendarHooks';
-import { useCalender } from 'src/components/AppProviders/CalenderProvider';
+import { useCalendar } from 'src/components/AppProviders/CalendarProvider';
 
 interface IProps {}
 
 const DurationsActiveMonth: React.FC<IProps> = () => {
-  const { month } = useCalender();
+  const { month } = useCalendar();
   const durations = CalendarHooks.useDurations_Project_Month();
 
   const series = Object.entries(durations).reduce(

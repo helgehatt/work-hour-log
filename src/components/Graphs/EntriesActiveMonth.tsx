@@ -1,11 +1,11 @@
 import React from 'react';
 import ReactApexChart from 'react-apexcharts';
-import { useCalender } from 'src/components/AppProviders/CalenderProvider';
+import { useCalendar } from 'src/components/AppProviders/CalendarProvider';
 
 interface IProps {}
 
 const EntriesActiveMonth: React.FC<IProps> = () => {
-  const { hours, month } = useCalender();
+  const { hours, month } = useCalendar();
 
   const series = Object.values(hours[month] || {}).reduce(
     (acc, entries) => {

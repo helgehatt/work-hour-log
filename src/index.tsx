@@ -1,15 +1,21 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { BrowserRouter } from 'react-router-dom';
 import App from 'src/App';
+import AppProviders from 'src/components/AppProviders';
+import AppEffects from 'src/components/AppEffects';
 import GlobalStyle from 'src/GlobalStyle';
 import * as serviceWorker from 'src/serviceWorker';
-import { BrowserRouter } from 'react-router-dom';
 
 ReactDOM.render(
   <React.StrictMode>
     <BrowserRouter>
       <GlobalStyle />
-      <App />
+      <AppProviders>
+        <AppEffects>
+          <App />
+        </AppEffects>
+      </AppProviders>
     </BrowserRouter>
   </React.StrictMode>,
   document.getElementById('root')

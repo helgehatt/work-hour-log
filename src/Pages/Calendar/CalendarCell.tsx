@@ -1,8 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
-import CalenderEntry from 'src/components/CalenderEntry';
+import CalendarEntry from 'src/Pages/Calendar/CalendarEntry';
 import { useModal } from 'src/components/AppProviders/ModalProvider';
-import AddEntry from 'src/components/AddEntry';
+import AddEntry from 'src/Pages/Calendar/AddEntry';
 import CalendarHooks from 'src/components/AppHooks/CalendarHooks';
 
 interface IProps {
@@ -33,7 +33,7 @@ const Root = styled.div`
   }
 `;
 
-const CalenderCell: React.FC<IProps> = ({ date }) => {
+const CalendarCell: React.FC<IProps> = ({ date }) => {
   const { showModal } = useModal();
   const { isToday, isActive, hours } = CalendarHooks.useDate(date);
 
@@ -47,10 +47,10 @@ const CalenderCell: React.FC<IProps> = ({ date }) => {
         <span>{Number(date.substr(8))}</span>
       </div>
       {hours?.map(entry => (
-        <CalenderEntry key={entry.id} {...entry} disabled={!isActive} />
+        <CalendarEntry key={entry.id} {...entry} disabled={!isActive} />
       ))}
     </Root>
   );
 };
 
-export default CalenderCell;
+export default CalendarCell;
