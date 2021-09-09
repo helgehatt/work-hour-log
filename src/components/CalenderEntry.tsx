@@ -12,7 +12,11 @@ interface IProps extends WorkHourEntry {
   disabled?: boolean;
 }
 
-const Root = styled(Button)``;
+const Root = styled(Button)`
+  > span {
+    justify-content: space-evenly;
+  }
+`;
 
 const CalenderEntry: React.FC<IProps> = ({ disabled, ...entry }) => {
   const { showModal } = useModal();
@@ -43,17 +47,20 @@ const CalenderEntry: React.FC<IProps> = ({ disabled, ...entry }) => {
       fullWidth
       disabled={disabled}
     >
-      <Typography variant='body2'>
-        {showDuration ? (
+      {showDuration ? (
+        <Typography variant='body2'>
           <TimeText hours={Math.floor(duration / 60)} minutes={duration % 60} />
-        ) : (
-          <>
+        </Typography>
+      ) : (
+        <>
+          <Typography variant='body2'>
             <TimeText hours={start.hours()} minutes={start.minutes()} />
-            &nbsp;-&nbsp;
+          </Typography>
+          <Typography variant='body2'>
             <TimeText hours={stop.hours()} minutes={stop.minutes()} />
-          </>
-        )}
-      </Typography>
+          </Typography>
+        </>
+      )}
     </Root>
   );
 };
