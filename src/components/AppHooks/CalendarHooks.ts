@@ -14,6 +14,22 @@ const useDate = (date: string) => {
   };
 };
 
+const useEntries = (month: string) => {
+  const { hours } = useCalendar();
+
+  return React.useMemo(() => {
+    const entries = [] as WorkHourEntry[];
+
+    Object.values(hours[month] || {}).forEach(day => {
+      Object.values(day).forEach(entry => {
+        entries.push(entry);
+      });
+    });
+
+    return entries;
+  }, [hours, month]);
+};
+
 const useProjects = () => {
   const { hours } = useCalendar();
 
@@ -49,7 +65,8 @@ const useDurations_Project_Date = () => {
 
     Object.entries(hours[month] || {}).forEach(([date, entries]) => {
       Object.values(entries).forEach(entry => {
-        const duration = moment(entry.stop).diff(moment(entry.start), 'minutes') / 60;
+        const duration =
+          moment(entry.stop).diff(moment(entry.start), 'minutes') / 60;
         projectIndex[entry.project || 'Default'][date] += duration;
       });
     });
@@ -76,7 +93,8 @@ const useDurations_Project_Month = () => {
     Object.entries(hours).forEach(([month, dates]) => {
       Object.values(dates).forEach(entries => {
         Object.values(entries).forEach(entry => {
-          const duration = moment(entry.stop).diff(moment(entry.start), 'minutes') / 60;
+          const duration =
+            moment(entry.stop).diff(moment(entry.start), 'minutes') / 60;
           projectIndex[entry.project || 'Default'][month] += duration;
         });
       });
@@ -88,6 +106,7 @@ const useDurations_Project_Month = () => {
 
 const CalendarHooks = {
   useDate,
+  useEntries,
   useProjects,
   useDurations_Project_Date,
   useDurations_Project_Month,
